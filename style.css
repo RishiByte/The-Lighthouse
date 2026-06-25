@@ -153,6 +153,18 @@ body.light-theme .reservation .detail-item span {
   padding: 20px 0;
   transition: all var(--transition);
 }
+.rating-value{
+   
+  gap: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  
+}
+.rating-count{
+  white-space: nowrap;
+  color: #888;
+}
 
 .nav.scrolled {
   background-color: rgba(26, 23, 20, 0.95);
