@@ -714,16 +714,21 @@ document.addEventListener('DOMContentLoaded', function () {
         if (err) return console.error(err);
 
         const activeLang = i18next.resolvedLanguage || 'en';
-        const langSelector = document.getElementById('languageSelector');
-        if (langSelector) {
+        const langSelectors = document.querySelectorAll('.language-select');
+        langSelectors.forEach((langSelector) => {
           langSelector.value = activeLang;
           langSelector.addEventListener('change', (e) => {
-            i18next.changeLanguage(e.target.value, (err, t) => {
+            const selectedVal = e.target.value;
+            // Update all language dropdowns on the page to match
+            document.querySelectorAll('.language-select').forEach((sel) => {
+              sel.value = selectedVal;
+            });
+            i18next.changeLanguage(selectedVal, (err, t) => {
               if (err) return console.error(err);
               updateContent();
             });
           });
-        }
+        });
 
         updateContent();
       });
