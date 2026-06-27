@@ -646,6 +646,13 @@ document.addEventListener('click', function (e) {
   }
 });
 
+// ── Display total menu category count ──
+function displayCategoryCount() {
+  const categoryBtns = document.querySelectorAll('.filter-btn:not([data-filter="all"])');
+  const countEl = document.getElementById('menu-category-count');
+  if (countEl) countEl.textContent = categoryBtns.length + ' Menu Categories Available';
+}
+
 // ── Initialise ───
 document.addEventListener('DOMContentLoaded', function () {
   handleScroll();
@@ -653,6 +660,7 @@ document.addEventListener('DOMContentLoaded', function () {
   updateAvailableTimes();
   renderReviews();
   handleCardFlip();
+  displayCategoryCount();
 });
 
 // Mobile flip style
@@ -668,28 +676,9 @@ const mobileStyle = document.createElement('style');
 mobileStyle.textContent = styleForMobile;
 document.head.appendChild(mobileStyle);
 
-// Reservation form progress indicator
-const reservationForm = document.getElementById("reservationForm");
-const requiredFields = reservationForm.querySelectorAll("[required]");
-const progressBar = document.getElementById("progress-bar");
-const progressText = document.getElementById("progress-text");
+// Automatically update copyright year
+const currentYear = document.getElementById("current-year");
 
-function updateFormProgress() {
-  let completed = 0;
-
-  requiredFields.forEach((field) => {
-    if (field.value.trim() !== "") {
-      completed++;
-    }
-  });
-
-  progressBar.value = completed;
-  progressText.textContent = `${completed} of ${requiredFields.length} fields completed`;
+if (currentYear) {
+  currentYear.textContent = new Date().getFullYear();
 }
-
-requiredFields.forEach((field) => {
-  field.addEventListener("input", updateFormProgress);
-  field.addEventListener("change", updateFormProgress);
-});
-
-updateFormProgress();
