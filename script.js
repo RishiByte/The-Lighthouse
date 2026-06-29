@@ -646,6 +646,30 @@ document.addEventListener('click', function (e) {
   }
 });
 
+// Enable review submit button only when all required fields are completed
+const reviewName = document.getElementById("review-name");
+const reviewText = document.getElementById("review-text");
+const reviewSubmit = document.getElementById("review-submit");
+
+function updateReviewSubmitState() {
+  const isReady =
+    reviewName.value.trim() !== "" &&
+    reviewText.value.trim() !== "" &&
+    selectedRating > 0;
+
+  reviewSubmit.disabled = !isReady;
+}
+
+if (reviewName && reviewText && reviewSubmit) {
+  reviewName.addEventListener("input", updateReviewSubmitState);
+  reviewText.addEventListener("input", updateReviewSubmitState);
+
+  starBtns.forEach((star) => {
+    star.addEventListener("click", updateReviewSubmitState);
+  });
+
+  updateReviewSubmitState();
+}
 // ── Initialise ───
 document.addEventListener('DOMContentLoaded', function () {
   handleScroll();
