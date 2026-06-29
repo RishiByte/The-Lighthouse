@@ -12,6 +12,7 @@
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --transition: 0.3s ease;
 }
+
 body.light-theme {
   --color-bg: #f7f2e9;
   --color-bg-lighter: #fffaf2;
@@ -99,22 +100,18 @@ h4 {
   text-transform: uppercase;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all var(--transition);
-}
 
-.btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-bg);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .btn-primary:hover {
   background-color: var(--color-primary-dark);
-}
-
-.btn-outline {
-  background-color: transparent;
-  border-color: var(--color-text);
-  color: var(--color-text);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.35);
 }
 
 body.light-theme .hero .btn-outline {
@@ -128,9 +125,8 @@ body.light-theme .hero .btn-outline:hover {
   color: #ffffff;
 }
 
-/* Improve reservation section readability in light mode */
-
 body.light-theme .reservation .section-title,
+body.light-theme .reservation .reservation-info,
 body.light-theme .reservation .reservation-info p,
 body.light-theme .reservation .detail-item strong,
 body.light-theme .reservation .detail-item span {
@@ -140,6 +136,8 @@ body.light-theme .reservation .detail-item span {
 .btn-outline:hover {
   background-color: var(--color-text);
   color: var(--color-bg);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
 }
 
 .btn-full {
@@ -274,6 +272,20 @@ body.light-theme .reservation .detail-item span {
   transition: all var(--transition);
 }
 
+.rating-value {
+
+  gap: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+
+}
+
+.rating-count {
+  white-space: nowrap;
+  color: #888;
+}
+
 .nav.scrolled {
   background-color: rgba(26, 23, 20, 0.95);
   backdrop-filter: blur(10px);
@@ -323,10 +335,11 @@ body.light-theme .reservation .detail-item span {
   transition: width var(--transition);
 }
 
-.nav-link:hover::after{
-   color: var(--color-primary);
+.nav-link:hover::after {
+  color: var(--color-primary);
   transform: translateY(-2px);
 }
+
 .nav-link.active::after {
   width: 100%;
 }
@@ -368,14 +381,17 @@ body.light-theme .reservation .detail-item span {
   background-color: var(--color-text);
   transition: all var(--transition);
 }
+
 body.light-theme .nav.scrolled {
   background: rgba(214, 184, 112, 0.95);
   backdrop-filter: blur(10px);
 }
+
 /* Update the active/hover underline color for light theme */
 body.light-theme .nav-link::after {
   background-color: white;
 }
+
 body.light-theme .nav {
   background: transparent;
 }
@@ -449,6 +465,88 @@ body.light-theme .clicktoscroll {
   transform: rotate(10deg);
 }
 
+/* Language Selector */
+.language-selector-container {
+  position: relative;
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.language-select {
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+  font-family: var(--font-sans);
+  transition: all var(--transition);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1.5 2L6 6.5L10.5 2' stroke='%23c9a962' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.language-select:hover, .language-select:focus {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: rgba(201, 169, 98, 0.05);
+  box-shadow: 0 4px 15px rgba(201, 169, 98, 0.15);
+}
+
+.language-select option {
+  background-color: var(--color-bg-card);
+  color: var(--color-text);
+  padding: 12px;
+}
+
+/* Light theme options styling override */
+body.light-theme .language-select {
+  background-color: rgba(0, 0, 0, 0.02);
+  color: var(--color-text);
+}
+body.light-theme .language-select:hover,
+body.light-theme .language-select:focus {
+  background-color: rgba(201, 169, 98, 0.05);
+}
+
+/* Responsive visibility utilities */
+@media (min-width: 769px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+  
+  .nav-lang-item {
+    margin-top: 15px;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-lang-item .language-select {
+    width: 100%;
+    max-width: 200px;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    text-align: center;
+    background-position: right 16px center;
+    padding-right: 40px;
+    border-radius: 8px;
+  }
+}
+
 /* Hero Section */
 .hero {
   position: relative;
@@ -478,19 +576,18 @@ body.light-theme .clicktoscroll {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(26, 23, 20, 0.55) 0%,
-    rgba(26, 23, 20, 0.75) 50%,
-    rgba(26, 23, 20, 0.95) 100%
-  );
+  background: linear-gradient(to bottom,
+      rgba(26, 23, 20, 0.55) 0%,
+      rgba(26, 23, 20, 0.75) 50%,
+      rgba(26, 23, 20, 0.95) 100%);
   z-index: -1;
 }
 
 .hero-content {
   text-align: center;
   padding: 0 24px;
-  color: #f5f2ed; /* Enforce light text over the dark background overlay across all themes */
+  color: #f5f2ed;
+  /* Enforce light text over the dark background overlay across all themes */
 }
 
 .hero-tagline {
@@ -513,7 +610,8 @@ body.light-theme .clicktoscroll {
 
 .hero-subtitle {
   font-size: 1.125rem;
-  color: #9a958e; /* Enforce light muted color over the dark background overlay across all themes */
+  color: #9a958e;
+  /* Enforce light muted color over the dark background overlay across all themes */
   margin-bottom: 40px;
   font-style: italic;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
@@ -525,6 +623,7 @@ body.light-theme .clicktoscroll {
   justify-content: center;
   flex-wrap: wrap;
 }
+
 /* Fix homepage text visibility in light mode */
 body.light-theme .hero-title {
   color: #f8f5ef;
@@ -540,13 +639,12 @@ body.light-theme .clicktoscroll {
 }
 
 body.light-theme .hero-overlay {
-  background: linear-gradient(
-    to bottom,
-    rgba(26, 23, 20, 0.25) 0%,
-    rgba(26, 23, 20, 0.35) 50%,
-    rgba(26, 23, 20, 0.55) 100%
-  );
+  background: linear-gradient(to bottom,
+      rgba(26, 23, 20, 0.25) 0%,
+      rgba(26, 23, 20, 0.35) 50%,
+      rgba(26, 23, 20, 0.55) 100%);
 }
+
 body.light-theme .btn-outline {
   color: #f8f5ef;
   border-color: #f8f5ef;
@@ -556,6 +654,7 @@ body.light-theme .btn-outline:hover {
   background-color: #f8f5ef;
   color: #1a1714;
 }
+
 .hero-scroll {
   position: absolute;
   bottom: 11px;
@@ -581,10 +680,12 @@ body.light-theme .btn-outline:hover {
   background: linear-gradient(to bottom, var(--color-primary), transparent);
   animation: scrollPulse 2s infinite;
 }
+
 .hero-scroll:hover span {
   color: var(--color-primary);
   transition: color var(--transition);
 }
+
 .clicktoscroll {
   font-family: "Palatino Linotype", Palatino, "Book Antiqua", serif;
   font-style: italic;
@@ -594,12 +695,15 @@ body.light-theme .btn-outline:hover {
   color: var(--color-text-muted);
   text-transform: none !important;
 }
+
 @keyframes scrollPulse {
+
   0%,
   100% {
     opacity: 1;
     transform: scaleY(1);
   }
+
   50% {
     opacity: 0.5;
     transform: scaleY(0.8);
@@ -612,14 +716,17 @@ body.light-theme .btn-outline:hover {
 }
 
 @keyframes bounceDown {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(6px);
   }
 }
+
 /* About Section */
 .about {
   padding: 120px 0;
@@ -713,6 +820,7 @@ body.light-theme .btn-outline:hover {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -739,15 +847,18 @@ body.light-theme .btn-outline:hover {
   object-fit: cover;
 }
 
-.menu-items {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
+.menu-items { 
+  gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
 }
 
 .menu-item {
   padding-bottom: 24px;
   border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
 }
 
 .menu-item:last-child {
@@ -841,6 +952,7 @@ body.light-theme .btn-outline:hover {
   transition: all 0.3s ease;
   border-radius: 30px;
 }
+
 .filter-btn:hover,
 .filter-btn.active {
   background-color: var(--color-primary);
@@ -858,7 +970,9 @@ body.light-theme .btn-outline:hover {
   color: var(--color-text-muted);
   font-style: italic;
 }
+
 .food-tag {
+  width: 30%;
   display: inline-block;
   margin-bottom: 10px;
   padding: 4px 10px;
@@ -876,6 +990,7 @@ body.light-theme .btn-outline:hover {
   background-color: rgba(201, 74, 74, 0.15);
   color: #ff7b7b;
 }
+
 .food-card {
   display: flex;
   gap: 20px;
@@ -885,13 +1000,15 @@ body.light-theme .btn-outline:hover {
   border-radius: 12px;
   border: 1px solid var(--color-border);
   position: relative;
-  transition: border-color 0.3s ease, transform 0.3s ease; 
+  transition: border-color 0.3s ease, transform 0.3s ease;
+  justify-content:center;
 }
+
 .food-card::before {
   content: '';
   position: absolute;
   inset: -2px;
-  border-radius: 14px; 
+  border-radius: 14px;
   background: linear-gradient(135deg, #c9a227, #ffe082, #a67c00, #ffd54f, #c9a227);
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -899,12 +1016,13 @@ body.light-theme .btn-outline:hover {
   pointer-events: none;
 }
 
+
 .food-card::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 12px;
-  background-color: var(--color-bg-card); 
+  background-color: var(--color-bg-card);
   z-index: 1;
   pointer-events: none;
 }
@@ -912,13 +1030,16 @@ body.light-theme .btn-outline:hover {
 .food-card:hover::before {
   opacity: 1;
 }
+
 .food-card:hover {
   transform: scale(1.02);
 }
-.food-card > * {
+
+.food-card>* {
   position: relative;
   z-index: 2;
 }
+
 .food-image {
   width: 220px;
   height: 160px;
@@ -931,8 +1052,92 @@ body.light-theme .btn-outline:hover {
   flex: 1;
 }
 
-.food-content p {
-  margin-top: 10px;
+.specials {
+  padding: 100px 0;
+  background-color: var(--color-bg);
+}
+
+.specials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+/* Dark Mode (default) */
+.special-card {
+  background: #000;
+  color: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.special-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+.special-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.special-content {
+  padding: 1.5rem;
+}
+
+.special-content h3 {
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.special-content p {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+}
+
+.special-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #d4a017;
+  color: #fff;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.price {
+  display: block;
+  margin-top: 12px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* Light Theme */
+body.light-theme .special-card {
+  background: #fff;
+  color: #1a1714;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .special-content h3 {
+  color: #1a1714;
+}
+
+body.light-theme .special-content p {
+  color: #5f5b55;
+}
+
+body.light-theme .price {
+  color: #1a1714;
 }
 
 /* Reservation Section */
@@ -940,7 +1145,7 @@ body.light-theme .btn-outline:hover {
   position: relative;
   padding: 120px 0;
   overflow: hidden;
-  
+
 }
 
 .reservation-bg {
@@ -1055,6 +1260,7 @@ body.light-theme .btn-outline:hover {
   font-size: 1rem;
   transition: border-color var(--transition);
 }
+
 /* Dark theme calendar icon fix */
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
@@ -1066,6 +1272,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
   filter: invert(1) brightness(1.2);
 }
+
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
@@ -1268,6 +1475,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   flex: 1;
   word-break: break-word;
 }
+
 .review-author {
   display: flex;
   align-items: center;
@@ -1344,6 +1552,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   transform: scale(1.1);
 }
 
+
 @media (max-width: 1024px) {
   .reviews-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1354,31 +1563,19 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   .reviews-grid {
     grid-template-columns: 1fr;
   }
+
   .review-form-wrapper {
     padding: 24px 20px;
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 /* Footer */
 
 .footer {
   background:
-    linear-gradient(
-      to bottom,
+    linear-gradient(to bottom,
       #211d1a,
-      #161311
-    );
+      #161311);
 
   border-top: 1px solid rgba(201, 169, 98, 0.15);
   padding-top: 90px;
@@ -1392,7 +1589,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   inset: 0;
   background:
     radial-gradient(circle at top right,
-      rgba(201,169,98,0.08),
+      rgba(201, 169, 98, 0.08),
       transparent 35%);
   pointer-events: none;
 }
@@ -1514,7 +1711,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 }
 
 .newsletter-form input {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--color-border);
   padding: 14px 18px;
   color: var(--color-text);
@@ -1525,7 +1722,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 .newsletter-form input:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 4px rgba(201,169,98,0.1);
+  box-shadow: 0 0 0 4px rgba(201, 169, 98, 0.1);
 }
 
 .newsletter-form button {
@@ -1641,10 +1838,9 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   }
 }
 
-
-
 /* Responsive Design */
 @media (max-width: 1024px) {
+
   .about-grid,
   .menu-grid,
   .reservation-content,
@@ -1689,6 +1885,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     right: 0;
     opacity: 1;
   }
+
   .nav-menu.active .nav-link {
     animation: slideIn 0.3s ease forwards;
   }
@@ -1696,15 +1893,19 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   .nav-menu.active li:nth-child(1) {
     animation-delay: 0.1s;
   }
+
   .nav-menu.active li:nth-child(2) {
     animation-delay: 0.2s;
   }
+
   .nav-menu.active li:nth-child(3) {
     animation-delay: 0.3s;
   }
+
   .nav-menu.active li:nth-child(4) {
     animation-delay: 0.4s;
   }
+
   .nav-menu.active li:nth-child(5) {
     animation-delay: 0.5s;
   }
@@ -1761,16 +1962,19 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     height: 350px;
   }
 }
+
 @keyframes slideIn {
   from {
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
   }
 }
+
 @media (max-width: 480px) {
   .section-title {
     font-size: 2rem;
@@ -1790,6 +1994,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     gap: 4px;
   }
 }
+
 #backToTop {
   position: fixed;
   bottom: 32px;
@@ -1797,13 +2002,11 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   padding: 12px 18px;
   border-radius: 30px;
   border: none;
-  background: linear-gradient(
-    145deg,
-    #f5e090,
-    #c9a962 40%,
-    #8a6e2f 80%,
-    #c9a962
-  );
+  background: linear-gradient(145deg,
+      #f5e090,
+      #c9a962 40%,
+      #8a6e2f 80%,
+      #c9a962);
   color: #1a1a1a;
   font-size: 14px;
   font-weight: 600;
@@ -1831,6 +2034,37 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 #backToTop.visible {
   opacity: 1;
   visibility: visible;
+}
+
+/* Mobile menu card fix */
+@media (max-width: 768px) {
+  .food-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .food-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  .food-content {
+    width: 100%;
+  }
+
+  .menu-item-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #backToTop {
+    right: 16px;
+    bottom: 16px;
+    padding: 10px 14px;
+    font-size: 12px;
+  }
 }
 
 /* =============================================
@@ -1899,4 +2133,364 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 .diet-no-results.visible {
   display: block;
+}
+
+/* =============================================
+   3D CARD FLIP WITH POLAROID STYLE
+   ============================================= */
+
+/* Container for the entire flip card */
+.menu-item {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.food-card-3d {
+  display: flex;
+  flex-direction: row;
+  perspective: 1500px;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.food-card-inner {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 460px;
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-style: preserve-3d;
+}
+
+/* Flip on hover */
+.food-card-3d:hover .food-card-inner {
+  transform: rotateY(180deg) scale(1.02);
+}
+
+/* Front and Back faces */
+.food-card-front,
+.food-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  min-height: 460px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+}
+
+/* Front Face - Polaroid Style */
+.food-card-front {
+  transform: rotateY(0deg);
+  transition: transform 0.3s ease;
+}
+
+.polaroid {
+  background: var(--color-bg-card);
+  border-radius: 12px;
+  padding: 16px 16px 20px 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid var(--color-border);
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Rotation on hover - gives that polaroid tilt effect */
+.food-card-3d:hover .polaroid {
+  transform: rotate(-2deg) scale(0.98);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* Alternate rotation direction for even cards */
+.menu-item:nth-child(even) .food-card-3d:hover .polaroid {
+  transform: rotate(2deg) scale(0.98);
+}
+
+/* Polaroid Image Wrapper */
+.polaroid-image-wrapper {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.polaroid-image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.polaroid-image-wrapper:hover img {
+  transform: scale(1.08);
+}
+
+/* Decorative Tape on Polaroid */
+.polaroid-tape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 60px;
+  height: 30px;
+  background: rgba(255, 200, 100, 0.6);
+  clip-path: polygon(10% 0%, 90% 0%, 85% 100%, 15% 100%);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item:nth-child(even) .polaroid-tape {
+  transform: translateX(-50%) rotate(3deg);
+}
+
+.food-card-3d:hover .polaroid-tape {
+  opacity: 0.9;
+  transform: translateX(-50%) rotate(0deg) scale(1.1);
+}
+
+/* Badges on Polaroid */
+.polaroid-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.polaroid-badge.popular {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+}
+
+.polaroid-badge.classic {
+  background: linear-gradient(135deg, #f9ca24, #f0932b);
+  color: white;
+}
+
+.polaroid-badge.chef {
+  background: linear-gradient(135deg, #6ab04c, #218c53);
+  color: white;
+}
+
+.polaroid-badge.signature {
+  background: linear-gradient(135deg, #c9a962, #a88b4a);
+  color: white;
+}
+
+.polaroid-badge.refreshing {
+  background: linear-gradient(135deg, #22a6b3, #1b7b86);
+  color: white;
+}
+
+/* Polaroid Caption */
+.polaroid-caption {
+  padding: 8px 4px 4px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.polaroid-caption h3 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+  color: var(--color-text);
+}
+
+.polaroid-price {
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* ===== BACK FACE STYLES ===== */
+.food-card-back {
+  transform: rotateY(180deg);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.back-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.back-content h4 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  margin-bottom: 4px;
+}
+
+.back-content p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.back-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 4px 0;
+}
+
+.back-details span {
+  background: var(--color-bg);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
+.back-ingredients {
+  margin-top: 4px;
+}
+
+.back-ingredients strong {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-primary);
+  margin-bottom: 4px;
+}
+
+.back-ingredients span {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.back-allergens {
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border);
+}
+
+.back-allergens span {
+  font-size: 0.8rem;
+  color: #ff6b6b;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .menu-items {
+    grid-template-columns: 1fr;
+  }
+
+  .food-card-inner {
+    min-height: 300px;
+  }
+
+  .food-card-front,
+  .food-card-back {
+    min-height: 300px;
+  }
+
+  .polaroid-image-wrapper img {
+    height: 100%;
+  }
+
+  .food-card-3d:hover .food-card-inner {
+    transform: rotateY(180deg) scale(1.01);
+  }
+
+  .back-content p {
+    font-size: 0.8rem;
+  }
+
+  .back-details span {
+    font-size: 0.7rem;
+    padding: 2px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .polaroid {
+    padding: 12px 12px 16px 12px;
+  }
+
+  .polaroid-image-wrapper img {
+    height: 100%;
+  }
+
+  .polaroid-caption h3 {
+    font-size: 1rem;
+  }
+
+  .food-card-inner {
+    min-height: 280px;
+  }
+
+  .food-card-front,
+  .food-card-back {
+    min-height: 280px;
+  }
+
+  .back-content {
+    gap: 8px;
+  }
+
+  .back-content h4 {
+    font-size: 1rem;
+  }
+}
+
+/* Dark/Light theme support */
+body.light-theme .polaroid {
+  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .food-card-back {
+  background: #ffffff;
+}
+
+body.light-theme .back-details span {
+  background: var(--color-bg-lighter);
+}
+
+body.light-theme .polaroid-tape {
+  background: rgba(255, 200, 100, 0.8);
+}
+
+/* ── Menu Category Count ── */
+#menu-category-count {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: var(--color-text-muted, #999);
+  margin-top: 0.4rem;
+  letter-spacing: 0.04em;
 }
