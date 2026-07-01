@@ -2747,3 +2747,40 @@ body.light-theme .back-details span {
 body.light-theme .polaroid-tape {
   background: rgba(255, 200, 100, 0.8);
 }
+
+
+/* Light Theme: Footer */
+.footer-bottom {
+  padding: 28px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-bottom p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+body.light-theme .footer {
+  /* Scope the contrast adjustments specifically to the footer */
+  --color-bg: #fcfaf5;
+  --color-bg-lighter: #ffffff;
+  --color-primary: #b59549; 
+  
+  background: linear-gradient(to bottom, var(--color-bg-lighter), var(--color-bg));
+  border-top: 1px solid var(--color-border);
+}
+
+body.light-theme .newsletter-form input {
+  background-color: var(--color-bg-card);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+  }
+}
