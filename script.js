@@ -581,7 +581,8 @@ function setupIntersectionObserver() {
       [pinnedReview, ...getReviews()].forEach((review) => {
         const card = document.createElement("div");
         card.className = "review-card";
-        const stars = "\u2605".repeat(review.rating) + "\u2606".repeat(5 - review.rating);
+        const rating = Math.max(0, Math.min(5, Math.round(Number(review.rating) || 0)));
+        const stars = "\u2605".repeat(rating) + "\u2606".repeat(5 - rating);
 
         card.innerHTML = `
           <div class="review-stars">${stars}</div>
