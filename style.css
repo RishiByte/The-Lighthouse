@@ -137,6 +137,7 @@ body.light-theme .hero .btn-outline:hover {
 .btn-full {
   width: 100%;
 }
+
 /* ── EmailJS Reservation Toast Notification ─────────────────────────── */
 .reservation-toast {
   position: fixed;
@@ -267,12 +268,10 @@ body.light-theme .hero .btn-outline:hover {
 }
 
 .rating-value {
-
   gap: 6px;
   font-size: 14px;
   white-space: nowrap;
   flex-wrap: nowrap;
-
 }
 
 .rating-count {
@@ -1123,6 +1122,7 @@ body.light-theme .scroll-arrow {
   justify-content: center;
   gap: 12px;
 }
+
 .diet-filters {
   display: flex;
   gap: 10px;
@@ -1220,7 +1220,6 @@ body.light-theme .scroll-arrow {
   pointer-events: none;
 }
 
-
 .food-card::after {
   content: '';
   position: absolute;
@@ -1230,6 +1229,7 @@ body.light-theme .scroll-arrow {
   z-index: 1;
   pointer-events: none;
 }
+
 .food-card:hover::before {
   opacity: 1;
 }
@@ -1576,7 +1576,6 @@ body.light-theme .price {
   position: relative;
   padding: 120px 0;
   overflow: hidden;
-
 }
 
 .reservation-bg {
@@ -1955,7 +1954,6 @@ body.light-theme .time-slot-btn.limited .availability {
   height: 100%;
   border: 0;
   filter: none;
-
 }
 
 /* ── Reviews Section ─────────────────────────────────── */
@@ -2081,6 +2079,7 @@ body.light-theme .time-slot-btn.limited .availability {
   color: var(--color-primary);
   transform: scale(1.1);
 }
+
 @media (max-width: 1024px) {
   .reviews-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -2091,9 +2090,6 @@ body.light-theme .time-slot-btn.limited .availability {
   .reviews-grid {
     grid-template-columns: 1fr;
   }
-  .menu-items {
-  grid-template-columns: 1fr;
-}
 
   .review-form-wrapper {
     padding: 24px 20px;
@@ -2101,7 +2097,6 @@ body.light-theme .time-slot-btn.limited .availability {
 }
 
 /* Footer */
-
 .footer {
   background:
     linear-gradient(to bottom,
@@ -2134,7 +2129,6 @@ body.light-theme .time-slot-btn.limited .availability {
 }
 
 /* BRAND */
-
 .footer-brand h2 {
   font-family: var(--font-serif);
   font-size: 2.2rem;
@@ -2150,7 +2144,6 @@ body.light-theme .time-slot-btn.limited .availability {
 }
 
 /* SOCIALS */
-
 .footer-socials {
   display: flex;
   gap: 14px;
@@ -2205,7 +2198,6 @@ body.light-theme .time-slot-btn.limited .availability {
 }
 
 /* COLUMNS */
-
 .footer-column h3 {
   font-size: 1rem;
   text-transform: uppercase;
@@ -2233,7 +2225,6 @@ body.light-theme .time-slot-btn.limited .availability {
 }
 
 /* NEWSLETTER */
-
 .newsletter-form {
   display: flex;
   flex-direction: column;
@@ -2277,7 +2268,6 @@ body.light-theme .time-slot-btn.limited .availability {
 }
 
 /* BOTTOM */
-
 .footer-bottom {
   padding: 28px 0;
   display: flex;
@@ -2292,7 +2282,6 @@ body.light-theme .time-slot-btn.limited .availability {
 }
 
 /* RESPONSIVE */
-
 @media (max-width: 1024px) {
   .footer-top {
     grid-template-columns: 1fr 1fr;
@@ -2301,7 +2290,6 @@ body.light-theme .time-slot-btn.limited .availability {
 }
 
 @media (max-width: 768px) {
-
   .footer {
     padding-top: 70px;
   }
@@ -2326,7 +2314,6 @@ body.light-theme .time-slot-btn.limited .availability {
 }
 
 @media (max-width: 480px) {
-
   .footer {
     padding-top: 60px;
   }
@@ -2351,7 +2338,6 @@ body.light-theme .time-slot-btn.limited .availability {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-
   .about-grid,
   .menu-grid,
   .reservation-content,
@@ -3007,21 +2993,7 @@ body.light-theme .polaroid-tape {
   background: rgba(255, 200, 100, 0.8);
 }
 
-
 /* Light Theme: Footer */
-.footer-bottom {
-  padding: 28px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
-
-.footer-bottom p {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-}
-
 body.light-theme .footer {
   /* Scope the contrast adjustments specifically to the footer */
   --color-bg: #fcfaf5;
@@ -3034,12 +3006,4 @@ body.light-theme .footer {
 
 body.light-theme .newsletter-form input {
   background-color: var(--color-bg-card);
-}
-
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-  .footer-top {
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
-  }
 }
