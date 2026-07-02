@@ -1073,6 +1073,7 @@ document.addEventListener('DOMContentLoaded', () => {
   displayCategoryCount();
   updateOpenStatusBadge();
   setupSeatingMap();
+  setupGiftCardCustomizer();
 
   if (typeof i18next !== 'undefined') {
     i18next
@@ -1237,4 +1238,128 @@ function setupSeatingMap() {
   }
 
   renderSeatingMap();
+}
+
+// =============================================
+// Feature 2: Luxury Dining Gift Cards
+// =============================================
+function setupGiftCardCustomizer() {
+  const valueButtons = document.querySelectorAll(".value-btn");
+  const customValueWrapper = document.querySelector(".custom-value-input-wrapper");
+  const customValueInput = document.getElementById("custom-giftcard-value");
+  const selectedValueInput = document.getElementById("selected-giftcard-value");
+  const valueDisplay = document.querySelector(".giftcard-card-value-display");
+
+  const themeButtons = document.querySelectorAll(".theme-option-btn");
+  const selectedThemeInput = document.getElementById("selected-giftcard-theme");
+  const cardPreview = document.getElementById("giftcard-card-preview");
+
+  const recipientInput = document.getElementById("giftcard-recipient");
+  const senderInput = document.getElementById("giftcard-sender");
+  const messageInput = document.getElementById("giftcard-message");
+
+  const previewTo = document.getElementById("preview-to");
+  const previewFrom = document.getElementById("preview-from");
+  const previewMessage = document.getElementById("preview-message");
+
+  const giftcardForm = document.getElementById("giftcard-form");
+  const successPanel = document.getElementById("voucher-success-panel");
+  const downloadBtn = document.getElementById("download-voucher-btn");
+
+  if (!giftcardForm) return;
+
+  function formatCurrency(amount) {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0
+    }).format(amount);
+  }
+
+  // Handle Value Select
+  valueButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      valueButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const val = btn.dataset.value;
+      if (val === "custom") {
+        customValueWrapper.style.display = "block";
+        selectedValueInput.value = customValueInput.value || 0;
+        valueDisplay.textContent = formatCurrency(customValueInput.value || 0);
+      } else {
+        customValueWrapper.style.display = "none";
+        selectedValueInput.value = val;
+        valueDisplay.textContent = formatCurrency(val);
+      }
+    });
+  });
+
+  customValueInput?.addEventListener("input", () => {
+    const val = parseInt(customValueInput.value) || 0;
+    selectedValueInput.value = val;
+    valueDisplay.textContent = formatCurrency(val);
+  });
+
+  // Handle Theme Select
+  themeButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      themeButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const theme = btn.dataset.theme;
+      selectedThemeInput.value = theme;
+      
+      cardPreview.className = `giftcard-card ${theme}`;
+    });
+  });
+
+  // Handle Input Changes
+  recipientInput?.addEventListener("input", () => {
+    previewTo.textContent = recipientInput.value || "Recipient Name";
+  });
+
+  senderInput?.addEventListener("input", () => {
+    previewFrom.textContent = senderInput.value || "Your Name";
+  });
+
+  messageInput?.addEventListener("input", () => {
+    previewMessage.textContent = messageInput.value ? `"${messageInput.value}"` : '"Write a warm message..."';
+  });
+
+  // Handle Form Submit (Simulation)
+  giftcardForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const submitBtn = giftcardForm.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    const value = parseInt(selectedValueInput.value) || 0;
+
+    if (value < 1000) {
+      alert("Minimum voucher value is ₹1,000");
+      return;
+    }
+
+    submitBtn.textContent = "Processing Luxury Gift Card...";
+    submitBtn.disabled = true;
+
+    await new Promise(r => setTimeout(r, 1500));
+
+    // Generate random code
+    const randCode = "LH-" + Math.floor(1000 + Math.random() * 9000) + "-" + Math.floor(1000 + Math.random() * 9000);
+    const codeSpan = cardPreview.querySelector(".giftcard-card-footer .code");
+    if (codeSpan) codeSpan.textContent = randCode;
+
+    // Show Success Panel
+    successPanel.style.display = "block";
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+
+    // Show toast
+    showReservationToast("success", `Voucher for ${formatCurrency(value)} successfully customized and generated!`);
+  });
+
+  downloadBtn?.addEventListener("click", () => {
+    window.print();
+  });
 }

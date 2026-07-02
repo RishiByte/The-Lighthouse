@@ -41,6 +41,7 @@
           <li><a href="#menu" class="nav-link" data-section="menu" data-i18n="nav.menu">Menu</a></li>
           <li><a href="#reservation" class="nav-link" data-section="reservation" data-i18n="nav.reservation">Reservations</a></li>
           <li><a href="#reviews" class="nav-link" data-section="reviews" data-i18n="nav.reviews">Reviews</a></li>
+          <li><a href="#giftcards" class="nav-link" data-section="giftcards" data-i18n="nav.giftcards">Gift Cards</a></li>
           <li><a href="#location" class="nav-link" data-section="location" data-i18n="nav.location">Location</a></li>
           <li class="mobile-only nav-lang-item">
             <div class="language-selector-container">
@@ -928,6 +929,105 @@
             <button type="submit" class="btn btn-primary btn-full" data-i18n="reviews.submit">Submit Review</button>
             <p id="review-msg" class="form-note" style="display: none"></p>
           </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gift Cards Section -->
+    <section class="giftcards-section" id="giftcards">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="giftcards.label">Luxury Gifting</span>
+          <h2 class="section-title" data-i18n="giftcards.title">Gift Cards & Vouchers</h2>
+          <p class="section-desc" data-i18n="giftcards.subtitle" style="max-width: 600px; margin: 0 auto; color: var(--color-text-muted);">Share the gift of an exceptional dining experience at The Lighthouse</p>
+        </div>
+
+        <div class="giftcards-grid">
+          <!-- Customization Form -->
+          <div class="giftcard-form-container">
+            <form id="giftcard-form">
+              <!-- Value Selector -->
+              <div class="form-group full-width">
+                <label data-i18n="giftcards.select_value">Select Voucher Value</label>
+                <div class="value-options">
+                  <button type="button" class="value-btn active" data-value="5000">₹5,000</button>
+                  <button type="button" class="value-btn" data-value="10000">₹10,000</button>
+                  <button type="button" class="value-btn" data-value="25000">₹25,000</button>
+                  <button type="button" class="value-btn" data-value="custom">Custom</button>
+                </div>
+                <div class="custom-value-input-wrapper" style="display: none; margin-top: 10px;">
+                  <input type="number" id="custom-giftcard-value" placeholder="Enter custom amount in ₹" min="1000" max="500000" />
+                </div>
+                <input type="hidden" id="selected-giftcard-value" name="giftcard-value" value="5000" />
+              </div>
+
+              <!-- Theme Selector -->
+              <div class="form-group full-width" style="margin-top: 20px;">
+                <label data-i18n="giftcards.select_theme">Select Design Theme</label>
+                <div class="theme-options">
+                  <button type="button" class="theme-option-btn active" data-theme="theme-gold">
+                    <span class="theme-preview gold"></span> Classic Gold
+                  </button>
+                  <button type="button" class="theme-option-btn" data-theme="theme-obsidian">
+                    <span class="theme-preview obsidian"></span> Midnight Obsidian
+                  </button>
+                  <button type="button" class="theme-option-btn" data-theme="theme-platinum">
+                    <span class="theme-preview platinum"></span> Platinum Crest
+                  </button>
+                </div>
+                <input type="hidden" id="selected-giftcard-theme" name="giftcard-theme" value="theme-gold" />
+              </div>
+
+              <!-- Recipient & Message -->
+              <div class="form-row" style="margin-top: 20px;">
+                <div class="form-group">
+                  <label for="giftcard-recipient" data-i18n="giftcards.recipient_name">Recipient Name</label>
+                  <input type="text" id="giftcard-recipient" placeholder="Recipient Name" required />
+                </div>
+                <div class="form-group">
+                  <label for="giftcard-sender" data-i18n="giftcards.sender_name">Your Name</label>
+                  <input type="text" id="giftcard-sender" placeholder="Your Name" required />
+                </div>
+              </div>
+
+              <div class="form-group full-width" style="margin-top: 20px;">
+                <label for="giftcard-message" data-i18n="giftcards.personal_message">Personal Message</label>
+                <textarea id="giftcard-message" rows="3" placeholder="Write a warm message..." maxlength="150"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full" style="margin-top: 25px;" data-i18n="giftcards.purchase_btn">Purchase Gift Card</button>
+            </form>
+          </div>
+
+          <!-- Live Card Preview -->
+          <div class="giftcard-preview-container">
+            <div class="giftcard-card theme-gold" id="giftcard-card-preview">
+              <div class="giftcard-card-logo">The Lighthouse</div>
+              <div class="giftcard-card-badge">E-Voucher</div>
+              <div class="giftcard-card-value-display">₹5,000</div>
+              <div class="giftcard-card-details">
+                <div class="card-detail-item">
+                  <span class="label">TO:</span>
+                  <span class="value" id="preview-to">Recipient Name</span>
+                </div>
+                <div class="card-detail-item">
+                  <span class="label">FROM:</span>
+                  <span class="value" id="preview-from">Your Name</span>
+                </div>
+                <div class="card-detail-msg" id="preview-message">"Write a warm message..."</div>
+              </div>
+              <div class="giftcard-card-footer">
+                <span class="code">LH-XXXX-XXXX</span>
+                <span class="expiry">Valid for 1 year</span>
+              </div>
+            </div>
+            
+            <!-- Download / Print Voucher Trigger -->
+            <div class="voucher-success-panel" id="voucher-success-panel" style="display: none;">
+              <p class="success-msg">🎉 Gift Card Purchased Successfully!</p>
+              <button id="download-voucher-btn" class="btn btn-outline btn-full">🖨️ Print & Download Voucher</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
