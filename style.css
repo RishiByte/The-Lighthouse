@@ -3944,6 +3944,46 @@ body.light-theme .newsletter-form input {
   color: #4caf50;
 }
 
+/* Scroll Reveal & Autoplay Styles */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Make sure reviews grid on small screen wraps or scrolls horizontally */
+@media (max-width: 992px) {
+  .reviews-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+    padding-bottom: 20px;
+    scrollbar-width: none; /* Hide scrollbar for clean carousel look */
+  }
+  
+  .reviews-grid::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .review-card {
+    min-width: 300px;
+    scroll-snap-align: start;
+    flex: 0 0 calc(50% - 10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .review-card {
+    flex: 0 0 100%;
+  }
+}
+
 
 
 
