@@ -3944,6 +3944,154 @@ body.light-theme .newsletter-form input {
   color: #4caf50;
 }
 
+/* Dish Detail Modal */
+.dish-modal {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+}
+
+.dish-modal-content {
+  background-color: var(--color-bg-lighter);
+  border: 1px solid var(--color-primary);
+  margin: 8% auto;
+  padding: 0;
+  width: 90%;
+  max-width: 700px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.dish-modal-close {
+  color: #ffffff;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color var(--transition);
+  z-index: 10;
+  background: rgba(0,0,0,0.5);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.dish-modal-close:hover {
+  color: var(--color-primary);
+}
+
+.dish-modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+}
+
+@media (max-width: 768px) {
+  .dish-modal-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dish-modal-image-wrapper {
+  height: 100%;
+  min-height: 250px;
+}
+
+.dish-modal-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dish-modal-details {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.dish-modal-badge {
+  align-self: flex-start;
+  background-color: var(--color-primary);
+  color: #1a1714;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dish-modal-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.dish-modal-desc {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.dish-info-chips {
+  display: flex;
+  gap: 12px;
+}
+
+.dish-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+.dish-ingredients h4, .dish-allergens h4 {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  margin-bottom: 5px;
+}
+
+.dish-ingredients p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.allergen-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.allergen-badge {
+  background-color: rgba(196, 74, 74, 0.1);
+  border: 1px solid rgba(196, 74, 74, 0.3);
+  color: #c44a4a;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
 
 
 

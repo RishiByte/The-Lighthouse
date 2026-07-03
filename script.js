@@ -1089,6 +1089,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupGiftCardCustomizer();
   setupVirtualSommelier();
   setupLoyaltyClub();
+  setupRecipeModal();
 
   if (typeof i18next !== 'undefined') {
     i18next
@@ -1773,4 +1774,118 @@ function addLoyaltyPoints(points, reason) {
   } catch (e) {
     console.error(e);
   }
+}
+
+// =============================================
+// Feature 8: Chef's Special Recipe Detail Modal
+// =============================================
+const DISH_DETAILS = {
+  "hyderabadi-chicken-biryani": {
+    badge: "Chef Dum Special",
+    time: "45 mins",
+    calories: "680 kcal",
+    ingredients: "Premium Basmati Rice, Tender Chicken pieces, Kashmiri Saffron threads, Mint leaves, Fried onions, Whole spices mix, Curd marinade.",
+    allergens: ["Lactose (from Ghee/Yogurt)"]
+  },
+  "chicken-keema-dosa": {
+    badge: "Fusion Special",
+    time: "20 mins",
+    calories: "450 kcal",
+    ingredients: "Fermented rice batter, Spiced chicken keema, Coriander leaves, Ginger-garlic paste, Coconut chutney side.",
+    allergens: ["None"]
+  },
+  "paneer-butter-masala": {
+    badge: "Royal Vegetarian",
+    time: "25 mins",
+    calories: "510 kcal",
+    ingredients: "Cottage cheese (Paneer), Cashew paste, Fresh cream, Rich tomato puree, Kasturi methi, Butter.",
+    allergens: ["Dairy", "Nuts"]
+  },
+  "butter-chicken": {
+    badge: "Heritage Signature",
+    time: "30 mins",
+    calories: "620 kcal",
+    ingredients: "Tandoori grilled chicken, Creamy tomato gravy, Kasoori methi, Fresh butter, Honey, Rich spice blends.",
+    allergens: ["Dairy", "Nuts"]
+  },
+  "mango-lassi": {
+    badge: "Cooling Nectar",
+    time: "5 mins",
+    calories: "280 kcal",
+    ingredients: "Alphonso mango pulp, Chilled yogurt, Sugar syrup, Cardamom powder, Pistachio garnish.",
+    allergens: ["Dairy", "Nuts (garnish)"]
+  },
+  "masala-chai": {
+    badge: "Heritage Brew",
+    time: "10 mins",
+    calories: "120 kcal",
+    ingredients: "Assam black tea leaves, Fresh milk, Cardamom, Ginger, Cinnamon, Cloves, Sugar.",
+    allergens: ["Dairy"]
+  }
+};
+
+function setupRecipeModal() {
+  const modal = document.getElementById("dish-modal");
+  const closeBtn = document.getElementById("closeDishModal");
+
+  if (!modal) return;
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+  }
+
+  // Close when clicking outside content
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  // Attach listeners to all cards (both special-card and standard food-card)
+  const dishCards = document.querySelectorAll(".special-card, .food-card");
+  dishCards.forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest("button") || e.target.closest("a") || e.target.classList.contains("fav-btn")) {
+        return;
+      }
+
+      const imgEl = card.querySelector("img");
+      const titleEl = card.querySelector("h3");
+      const descEl = card.querySelector("p");
+
+      if (!titleEl) return;
+
+      const titleText = titleEl.textContent.trim();
+      const slug = titleText.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+      const details = DISH_DETAILS[slug] || {
+        badge: "The Lighthouse Special",
+        time: "25 mins",
+        calories: "380 kcal",
+        ingredients: "Freshly sourced premium local ingredients, prepared with custom spice mix and extra care.",
+        allergens: ["Please consult our head server for allergen queries"]
+      };
+
+      // Populate modal
+      document.getElementById("dish-modal-title").textContent = titleText;
+      document.getElementById("dish-modal-img").src = imgEl ? imgEl.src : "";
+      document.getElementById("dish-modal-img").alt = titleText;
+      document.getElementById("dish-modal-desc").textContent = descEl ? descEl.textContent.trim() : "Enjoy a sensory culinary journey crafted with the finest ingredients.";
+      document.getElementById("dish-modal-badge").textContent = details.badge;
+      document.getElementById("dish-modal-time").textContent = details.time;
+      document.getElementById("dish-modal-calories").textContent = details.calories;
+      document.getElementById("dish-modal-ingredients").textContent = details.ingredients;
+
+      const allergenContainer = document.getElementById("dish-modal-allergens");
+      if (allergenContainer) {
+        allergenContainer.innerHTML = details.allergens.map(allergen => `
+          <span class="allergen-badge">${allergen}</span>
+        `).join("");
+      }
+
+      modal.style.display = "block";
+    });
+  });
 }

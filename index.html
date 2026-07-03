@@ -1454,6 +1454,51 @@
       </div>
     </div>
 
+    <!-- Recipe/Dish Detail Modal -->
+    <div id="dish-modal" class="dish-modal">
+      <div class="dish-modal-content">
+        <span class="dish-modal-close" id="closeDishModal">&times;</span>
+        <div class="dish-modal-body">
+          <div class="dish-modal-image-wrapper">
+            <img id="dish-modal-img" src="" alt="Dish Image" />
+          </div>
+          <div class="dish-modal-details">
+            <span class="dish-modal-badge" id="dish-modal-badge">Chef Recommendation</span>
+            <h3 class="dish-modal-title" id="dish-modal-title">Dish Title</h3>
+            <p class="dish-modal-desc" id="dish-modal-desc">Detailed description of the signature dish, explaining how it is cooked and what makes it special.</p>
+            
+            <div class="dish-info-chips">
+              <span class="dish-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg> 
+                Prep: <span id="dish-modal-time">25 mins</span>
+              </span>
+              <span class="dish-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg> 
+                Calories: <span id="dish-modal-calories">450 kcal</span>
+              </span>
+            </div>
+
+            <div class="dish-ingredients">
+              <h4>Key Ingredients:</h4>
+              <p id="dish-modal-ingredients">Basmati Rice, Saffron, Spices, Yogurt, Chicken/Veggies.</p>
+            </div>
+
+            <div class="dish-allergens">
+              <h4>Allergen Warnings:</h4>
+              <div class="allergen-badges" id="dish-modal-allergens">
+                <!-- badges here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
   </body>
 </html>
