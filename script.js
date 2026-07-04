@@ -669,6 +669,7 @@ async function handleFormSubmit(e) {
       if (result.success) {
         showReservationToast('success', `Reservation confirmed for ${selectedTable}! Check your email for details.`);
         addLoyaltyPoints(100, "Table Reservation");
+        showDigitalTicket(formData.guest_name, formData.booking_date, formData.booking_time, formData.guest_count, selectedTable);
         showReservationSuccessModal(dateVal, timeVal, guestsVal);
         showReservationToast('success', `Reservation confirmed for ${selectedTable || formData.guest_count + ' guest(s)'}! Check your email for details.`);
         if (typeof addLoyaltyPoints === 'function') addLoyaltyPoints(100, "Table Reservation");
@@ -689,6 +690,7 @@ async function handleFormSubmit(e) {
     await new Promise(r => setTimeout(r, 1200));
     showReservationToast('success', `Thank you, ${formData.guest_name}! We've registered your request for ${formData.guest_count} guest(s) at ${selectedTable} on ${formData.booking_date} at ${formData.booking_time}.`);
     addLoyaltyPoints(100, "Table Reservation");
+    showDigitalTicket(formData.guest_name, formData.booking_date, formData.booking_time, formData.guest_count, selectedTable);
     showReservationSuccessModal(dateVal, timeVal, guestsVal);
     showReservationToast('success', `Thank you, ${formData.guest_name}! We've registered your request for ${formData.guest_count} guest(s) at ${selectedTable || 'your table'} on ${formData.booking_date} at ${formData.booking_time}.`);
     if (typeof addLoyaltyPoints === 'function') addLoyaltyPoints(100, "Table Reservation");
@@ -702,6 +704,7 @@ async function handleFormSubmit(e) {
       await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.adminTemplateId, formData);
       showReservationToast('success', `Thank you, ${formData.guest_name}! A confirmation for ${selectedTable} has been sent to ${formData.guest_email}.`);
       addLoyaltyPoints(100, "Table Reservation");
+      showDigitalTicket(formData.guest_name, formData.booking_date, formData.booking_time, formData.guest_count, selectedTable);
       showReservationSuccessModal(dateVal, timeVal, guestsVal);
       reservationForm.reset();
       updateAvailableTimes();
@@ -2008,12 +2011,51 @@ function setupRecipeModal() {
   if (!modal) return;
 
   if (closeBtn) {
+// Feature 7: Digital Reservation Ticket & Events
+// =============================================
+function showDigitalTicket(name, date, time, guests, table) {
+  const modal = document.getElementById("ticket-modal");
+  const guestNameEl = document.getElementById("ticket-guest-name");
+  const dateEl = document.getElementById("ticket-date");
+  const timeEl = document.getElementById("ticket-time");
+  const guestsEl = document.getElementById("ticket-guests");
+  const tableEl = document.getElementById("ticket-table");
+  const bookingCodeEl = document.getElementById("ticket-booking-code");
+
+  if (!modal) return;
+
+  if (guestNameEl) guestNameEl.textContent = name;
+  if (dateEl) dateEl.textContent = date;
+  if (timeEl) timeEl.textContent = time;
+  if (guestsEl) guestsEl.textContent = `${guests} Guest(s)`;
+  if (tableEl) tableEl.textContent = table || "Assigned Table";
+
+  const randomCode = "LH-" + Math.floor(1000 + Math.random() * 9000) + "-" + Math.floor(1000 + Math.random() * 9000);
+  if (bookingCodeEl) bookingCodeEl.textContent = randomCode;
+
+  modal.style.display = "block";
+}
+
+// Ticket Event Handlers
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("ticket-modal");
+  const closeBtn = document.getElementById("closeTicketModal");
+  const printBtn = document.getElementById("printTicketBtn");
+
+  if (closeBtn && modal) {
     closeBtn.addEventListener("click", () => {
       modal.style.display = "none";
     });
   }
 
   // Close when clicking outside content
+  if (printBtn) {
+    printBtn.addEventListener("click", () => {
+      window.print();
+    });
+  }
+
+  // Close modal when clicking outside content
   window.addEventListener("click", (e) => {
     if (e.target === modal) {
       modal.style.display = "none";

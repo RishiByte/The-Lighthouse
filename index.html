@@ -1193,6 +1193,54 @@
                 <!-- badges here -->
               </div>
             </div>
+    <!-- Digital Reservation Ticket Modal -->
+    <div id="ticket-modal" class="ticket-modal">
+      <div class="ticket-modal-content">
+        <span class="ticket-modal-close" id="closeTicketModal">&times;</span>
+        <div id="ticket-print-area">
+          <div class="luxury-ticket">
+            <div class="ticket-header">
+              <div class="ticket-logo">THE LIGHTHOUSE</div>
+              <div class="ticket-tagline">Fine Dining Reservation Pass</div>
+            </div>
+            <div class="ticket-body">
+              <div class="ticket-field">
+                <span class="label">Guest Name</span>
+                <span class="value" id="ticket-guest-name">-</span>
+              </div>
+              <div class="ticket-row">
+                <div class="ticket-field">
+                  <span class="label">Date</span>
+                  <span class="value" id="ticket-date">-</span>
+                </div>
+                <div class="ticket-field">
+                  <span class="label">Time</span>
+                  <span class="value" id="ticket-time">-</span>
+                </div>
+              </div>
+              <div class="ticket-row">
+                <div class="ticket-field">
+                  <span class="label">Party Size</span>
+                  <span class="value" id="ticket-guests">-</span>
+                </div>
+                <div class="ticket-field">
+                  <span class="label">Table Assigned</span>
+                  <span class="value" id="ticket-table">-</span>
+                </div>
+              </div>
+              <div class="ticket-barcode">
+                <div class="barcode-lines"></div>
+                <div class="ticket-code" id="ticket-booking-code">LH-1092-2938</div>
+              </div>
+            </div>
+            <div class="ticket-footer">
+              <p>Please present this digital pass upon arrival.</p>
+              <p>Valet parking is complimentary for ticket holders.</p>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <button type="button" class="btn btn-primary btn-sm" id="printTicketBtn">Print / Save Ticket</button>
     <!-- Reservation Success Modal -->
     <div id="reservation-success-modal" class="reservation-success-modal">
       <div class="success-modal-content">
