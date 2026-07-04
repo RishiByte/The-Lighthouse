@@ -223,6 +223,78 @@ function setupThemeToggle() {
   });
 }
 
+// ── Scroll effects & Parallax ──
+function handleScroll() {
+  const currentScroll = window.scrollY;
+
+  // Scroll Progress Bar Update
+  const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = totalHeight > 0 ? (currentScroll / totalHeight) * 100 : 0;
+  const progressBar = document.getElementById("scrollProgressBar");
+  if (progressBar) {
+    progressBar.style.width = `${progress}%`;
+  }
+
+  if (nav) {
+    nav.classList.toggle("scrolled", currentScroll > 50);
+  }
+
+  if (!isTouchDevice) {
+    if (heroBg) {
+      heroBg.style.transform = `translateY(${currentScroll * 0.5}px)`;
+    }
+    const reservationSection = document.getElementById("reservation");
+    if (reservationBg && reservationSection && currentScroll > window.innerHeight) {
+      const offset = (currentScroll - reservationSection.offsetTop) * 0.3;
+      reservationBg.style.transform = `translateY(${offset}px)`;
+    }
+  }
+
+  if (backToTopBtn) {
+    backToTopBtn.classList.toggle("visible", currentScroll > 300);
+  }
+
+  updateActiveNavLink();
+}
+
+function updateActiveNavLink() {
+  const sections = document.querySelectorAll('section[id]');
+  const scrollPosition = window.scrollY + 150;
+
+  sections.forEach((section) => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.offsetHeight;
+    const sectionId = section.getAttribute('id');
+
+    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+      const hasLink = Array.from(navLinks).some((link) => link.dataset.section === sectionId);
+      if (!hasLink) return;
+      navLinks.forEach((link) => {
+        link.classList.remove('active');
+        if (link.getAttribute('data-section') === sectionId) {
+          link.classList.add('active');
+        }
+      });
+    }
+  });
+}
+
+// ── Mobile menu ──
+function toggleMobileMenu() {
+  if (!navToggle || !navMenu) return;
+  navToggle.classList.toggle('active');
+  navMenu.classList.toggle('active');
+  document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+}
+
+function closeMobileMenu() {
+  if (!navToggle || !navMenu) return;
+  navToggle.classList.remove('active');
+  navMenu.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ── Menu Tabs and Filtering ──
 // =============================================
 // MENU FILTERING & TABS
 // =============================================
@@ -575,6 +647,9 @@ async function handleFormSubmit(e) {
       const apiData = { date: dateVal, time: timeVal, guests: guestsVal, specialRequests: structuredRequests };
       const result = await reservationAPI.createReservation(apiData);
       if (result.success) {
+        showReservationToast('success', `Reservation confirmed for ${selectedTable}! Check your email for details.`);
+        addLoyaltyPoints(100, "Table Reservation");
+        showReservationSuccessModal(dateVal, timeVal, guestsVal);
         showReservationToast('success', `Reservation confirmed for ${selectedTable || formData.guest_count + ' guest(s)'}! Check your email for details.`);
         if (typeof addLoyaltyPoints === 'function') addLoyaltyPoints(100, "Table Reservation");
         reservationForm.reset();
@@ -592,12 +667,31 @@ async function handleFormSubmit(e) {
   if (typeof emailjs === 'undefined' || EMAILJS_CONFIG.publicKey === 'YOUR_PUBLIC_KEY' || EMAILJS_CONFIG.publicKey === 'abc123XYZ') {
     console.warn('[EmailJS] Not configured — running in demo mode.');
     await new Promise(r => setTimeout(r, 1200));
+    showReservationToast('success', `Thank you, ${formData.guest_name}! We've registered your request for ${formData.guest_count} guest(s) at ${selectedTable} on ${formData.booking_date} at ${formData.booking_time}.`);
+    addLoyaltyPoints(100, "Table Reservation");
+    showReservationSuccessModal(dateVal, timeVal, guestsVal);
     showReservationToast('success', `Thank you, ${formData.guest_name}! We've registered your request for ${formData.guest_count} guest(s) at ${selectedTable || 'your table'} on ${formData.booking_date} at ${formData.booking_time}.`);
     if (typeof addLoyaltyPoints === 'function') addLoyaltyPoints(100, "Table Reservation");
     reservationForm.reset();
     updateAvailableTimes();
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
+  } else {
+    try {
+      await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.guestTemplateId, formData);
+      await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.adminTemplateId, formData);
+      showReservationToast('success', `Thank you, ${formData.guest_name}! A confirmation for ${selectedTable} has been sent to ${formData.guest_email}.`);
+      addLoyaltyPoints(100, "Table Reservation");
+      showReservationSuccessModal(dateVal, timeVal, guestsVal);
+      reservationForm.reset();
+      updateAvailableTimes();
+    } catch (err) {
+      console.error('[EmailJS] Error:', err);
+      showReservationToast('error', 'We couldn\'t send your confirmation email. Please call us at (555) 123-4567.');
+    } finally {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }
     return;
   }
 
@@ -1243,6 +1337,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupVirtualSommelier();
   setupLoyaltyClub();
   setupTableAvailabilityEstimator();
+  setupFaqAccordion();
 
   if (typeof i18next !== 'undefined') {
     i18next
@@ -1896,6 +1991,157 @@ function setupTableAvailabilityEstimator() {
       }, 0);
     });
   }
+// Feature 9: Reservation Success & Calendar Integration
+// =============================================
+function showReservationSuccessModal(date, time, guests) {
+  const modal = document.getElementById("reservation-success-modal");
+  const dateEl = document.getElementById("summary-date");
+  const timeEl = document.getElementById("summary-time");
+  const guestsEl = document.getElementById("summary-guests");
+  const googleBtn = document.getElementById("googleCalBtn");
+  const icsBtn = document.getElementById("icsCalBtn");
+  const closeBtn = document.getElementById("closeSuccessModal");
+
+  if (!modal) return;
+
+  if (dateEl) dateEl.textContent = date;
+  if (timeEl) timeEl.textContent = time;
+  if (guestsEl) guestsEl.textContent = guests + " Guest(s)";
+
+  // Format Date for iCal / Google Cal
+  const startDateTime = new Date(`${date}T${time}:00`);
+  const finalStart = isNaN(startDateTime.getTime()) ? new Date() : startDateTime;
+  const finalEnd = new Date(finalStart.getTime() + 2 * 60 * 60 * 1000); // 2 hours
+
+  const formatTime = (dt) => dt.toISOString().replace(/-|:|\.\d\d\d/g, "");
+
+  // Google Calendar URL
+  const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Table+Reservation+-+The+Lighthouse&dates=${formatTime(finalStart)}/${formatTime(finalEnd)}&details=Table+reservation+confirmed+for+${guests}+guests.+We+look+forward+to+serving+you.&location=123+Harbor+View+Drive,+Coastal+City,+CA`;
+  
+  if (googleBtn) {
+    googleBtn.onclick = () => window.open(googleUrl, "_blank");
+  }
+
+  // iCalendar (.ics) Download
+  if (icsBtn) {
+    icsBtn.onclick = () => {
+      const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//The Lighthouse//NONSGML Table Reservation//EN
+BEGIN:VEVENT
+UID:${Date.now()}@thelighthouse.com
+DTSTAMP:${formatTime(new Date())}
+DTSTART:${formatTime(finalStart)}
+DTEND:${formatTime(finalEnd)}
+SUMMARY:Table Reservation - The Lighthouse
+DESCRIPTION:Table reservation confirmed for ${guests} guests.
+LOCATION:123 Harbor View Drive, Coastal City, CA
+END:VEVENT
+END:VCALENDAR`;
+
+      const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `lighthouse_reservation_${date}.ics`;
+      link.click();
+    };
+  }
+
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+  }
+
+  window.onclick = (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  modal.style.display = "block";
+// Feature 11: Scroll Reveal & Autoplay
+// =============================================
+function setupIntersectionObserver() {
+  const reveals = document.querySelectorAll(".reveal");
+  if (!reveals.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px"
+  });
+
+  reveals.forEach((el) => observer.observe(el));
+}
+
+function setupAutoScroll() {
+  const grid = document.getElementById("reviews-grid");
+  if (!grid) return;
+
+  let autoplayTimer = null;
+
+  function startAutoplay() {
+    autoplayTimer = setInterval(() => {
+      const maxScroll = grid.scrollWidth - grid.clientWidth;
+      if (grid.scrollLeft >= maxScroll - 10) {
+        grid.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        grid.scrollBy({ left: 320, behavior: "smooth" });
+      }
+    }, 4000);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+
+  const isScrollable = () => grid.scrollWidth > grid.clientWidth;
+
+  if (isScrollable()) {
+    startAutoplay();
+  }
+
+  window.addEventListener("resize", () => {
+    stopAutoplay();
+    if (isScrollable()) {
+      startAutoplay();
+    }
+  });
+
+  grid.addEventListener("mouseenter", stopAutoplay);
+  grid.addEventListener("mouseleave", () => {
+    if (isScrollable()) startAutoplay();
+  });
+  grid.addEventListener("touchstart", stopAutoplay, { passive: true });
+  grid.addEventListener("touchend", () => {
+    if (isScrollable()) startAutoplay();
+// Feature 6: Interactive FAQ Accordion
+// =============================================
+function setupFaqAccordion() {
+  const faqQuestions = document.querySelectorAll(".faq-question");
+  faqQuestions.forEach(question => {
+    question.addEventListener("click", () => {
+      const item = question.parentElement;
+      const isActive = item.classList.contains("active");
+      
+      // Close all other items
+      document.querySelectorAll(".faq-item").forEach(el => el.classList.remove("active"));
+      
+      if (!isActive) {
+        item.classList.add("active");
+      }
+    });
+  });
 }
 // PDF MENU DOWNLOAD
 // =============================================
