@@ -829,6 +829,93 @@
       
     </section>
 
+    <!-- Gourmet Merch & Pantry Shop Section -->
+    <section class="merch-section reveal" id="merch-shop" style="padding: 80px 0; background: #131110; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+      <div class="container">
+        <div class="section-header" style="text-align: center; margin-bottom: 40px;">
+          <span class="section-subtitle" style="color: var(--color-primary); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;">Pantry & Home</span>
+          <h2 class="section-title" style="font-family: var(--font-serif); font-size: 2.5rem; color: #fff; margin-top: 10px;">Lighthouse Gourmet Shop</h2>
+          <p style="color: var(--color-text-muted); max-width: 600px; margin: 15px auto 0;">Bring the luxury of The Lighthouse experience into your own kitchen with our curated artisanal ingredients and bespoke tableware.</p>
+
+          <!-- Category Toggles -->
+          <div style="display: inline-flex; background: #0c0a09; border: 1px solid var(--color-border); padding: 4px; border-radius: 30px; margin-top: 25px;">
+            <button class="merch-tab-btn active" data-cat="all" style="border: none; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.3s; background: var(--color-primary); color: #000;">Show All</button>
+            <button class="merch-tab-btn" data-cat="pantry" style="border: none; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.3s; background: transparent; color: var(--color-text-muted);">Artisanal Pantry</button>
+            <button class="merch-tab-btn" data-cat="merch" style="border: none; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.3s; background: transparent; color: var(--color-text-muted);">Bespoke Merch</button>
+          </div>
+        </div>
+
+        <!-- Merch Products Grid -->
+        <div class="merch-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; margin-top: 30px;">
+          
+          <!-- Item 1 -->
+          <div class="merch-card" data-category="pantry" style="background: #1a1714; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+            <div style="padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                <span style="background: rgba(201,169,98,0.1); color: var(--color-primary); font-size: 0.7rem; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Pantry</span>
+                <span style="color: #ef4444; font-size: 0.7rem; font-weight: bold;">Only 3 left!</span>
+              </div>
+              <h3 style="font-family: var(--font-serif); color: #fff; font-size: 1.25rem; margin-bottom: 8px;">Kashmiri Saffron Threads</h3>
+              <p style="color: var(--color-text-muted); font-size: 0.8rem; line-height: 1.4; margin-bottom: 12px;">Premium Grade-A saffron, hand-harvested from local fields of Pampore. Extremely aromatic.</p>
+              <strong style="color: var(--color-primary); font-size: 1.1rem;">₹899</strong>
+            </div>
+            <div style="padding: 0 20px 20px 20px;">
+              <button type="button" class="btn btn-outline btn-full add-merch-btn" data-id="saffron-threads" data-title="Kashmiri Saffron Threads" data-price="899" style="width: 100%;">Add to Cart</button>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="merch-card" data-category="pantry" style="background: #1a1714; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+            <div style="padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                <span style="background: rgba(201,169,98,0.1); color: var(--color-primary); font-size: 0.7rem; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Pantry</span>
+                <span style="color: #10b981; font-size: 0.7rem; font-weight: bold;">In Stock</span>
+              </div>
+              <h3 style="font-family: var(--font-serif); color: #fff; font-size: 1.25rem; margin-bottom: 8px;">Signature Chai Masala Blend</h3>
+              <p style="color: var(--color-text-muted); font-size: 0.8rem; line-height: 1.4; margin-bottom: 12px;">Our custom blend of cardamom, ginger, cloves, and cinnamon used in our signature tea.</p>
+              <strong style="color: var(--color-primary); font-size: 1.1rem;">₹349</strong>
+            </div>
+            <div style="padding: 0 20px 20px 20px;">
+              <button type="button" class="btn btn-outline btn-full add-merch-btn" data-id="chai-masala" data-title="Signature Chai Masala" data-price="349" style="width: 100%;">Add to Cart</button>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="merch-card" data-category="merch" style="background: #1a1714; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+            <div style="padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                <span style="background: rgba(201,169,98,0.1); color: var(--color-primary); font-size: 0.7rem; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Merch</span>
+                <span style="color: #ef4444; font-size: 0.7rem; font-weight: bold;">Only 2 left!</span>
+              </div>
+              <h3 style="font-family: var(--font-serif); color: #fff; font-size: 1.25rem; margin-bottom: 8px;">Embroidered Culinary Apron</h3>
+              <p style="color: var(--color-text-muted); font-size: 0.8rem; line-height: 1.4; margin-bottom: 12px;">Heavy-weight premium canvas organic apron featuring gold Lighthouse logo stitching.</p>
+              <strong style="color: var(--color-primary); font-size: 1.1rem;">₹1,499</strong>
+            </div>
+            <div style="padding: 0 20px 20px 20px;">
+              <button type="button" class="btn btn-outline btn-full add-merch-btn" data-id="chef-apron" data-title="Embroidered Culinary Apron" data-price="1499" style="width: 100%;">Add to Cart</button>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="merch-card" data-category="merch" style="background: #1a1714; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+            <div style="padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                <span style="background: rgba(201,169,98,0.1); color: var(--color-primary); font-size: 0.7rem; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Merch</span>
+                <span style="color: #10b981; font-size: 0.7rem; font-weight: bold;">In Stock</span>
+              </div>
+              <h3 style="font-family: var(--font-serif); color: #fff; font-size: 1.25rem; margin-bottom: 8px;">Handcrafted Copper Mule Mug</h3>
+              <p style="color: var(--color-text-muted); font-size: 0.8rem; line-height: 1.4; margin-bottom: 12px;">Pure solid hammered copper mug, perfect for signature mocktails. Stays ice cold.</p>
+              <strong style="color: var(--color-primary); font-size: 1.1rem;">₹999</strong>
+            </div>
+            <div style="padding: 0 20px 20px 20px;">
+              <button type="button" class="btn btn-outline btn-full add-merch-btn" data-id="copper-mug" data-title="Handcrafted Copper Mug" data-price="999" style="width: 100%;">Add to Cart</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <!-- Reservation Section -->
     <section class="reservation reveal" id="reservation">
     <section class="reservation" id="reservation">
@@ -1519,6 +1606,10 @@
         </div>
         <div style="text-align: center; margin-top: 20px;">
           <button type="button" class="btn btn-primary btn-sm" id="printTicketBtn">Print / Save Ticket</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Reservation Success Modal -->
     <div id="reservation-success-modal" class="reservation-success-modal">
       <div class="success-modal-content">

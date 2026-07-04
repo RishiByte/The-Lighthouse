@@ -328,19 +328,13 @@ function getActiveDiet() {
 function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
   const menuItems = document.querySelectorAll('.menu-item');
   let visibleCount = 0;
-  const searchText = menuSearch ? menuSearch.value.trim().toLowerCase() : "";
+  const searchLower = searchText.trim().toLowerCase();
 
   menuItems.forEach((item) => {
     const h3 = item.querySelector('h3');
     const itemName = h3 ? h3.textContent.toLowerCase() : "";
     const category = item.dataset.category || "";
-    const type = item.dataset.type || item.dataset.diet || "all";
-  const searchLower = searchText.toLowerCase();
-
-  menuItems.forEach((item) => {
-    const itemName = (item.querySelector('h3')?.textContent || "").toLowerCase();
-    const category = item.dataset.category || 'all';
-    const itemDiet = item.dataset.diet || item.dataset.type || 'all';
+    const itemDiet = item.dataset.diet || item.dataset.type || "all";
 
     const matchesSearch = itemName.includes(searchLower);
     const matchesFilter = filter === 'all' || category === filter;
@@ -351,15 +345,14 @@ function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
         h3.dataset.original = h3.innerHTML;
       }
       const originalText = h3.dataset.original;
-      if (searchText) {
-        const regex = new RegExp(`(${searchText})`, 'gi');
+      if (searchLower) {
+        const regex = new RegExp(`(${searchLower})`, 'gi');
         h3.innerHTML = originalText.replace(regex, '<span class="search-highlight">$1</span>');
       } else {
         h3.innerHTML = originalText;
       }
     }
 
-    // Use both class manipulation (from HEAD) and display toggle (from main) for robustness
     if (matchesSearch && matchesFilter && matchesDiet) {
       item.classList.remove('hidden-item', 'diet-hidden');
       item.style.display = "";
@@ -1362,6 +1355,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupTableAvailabilityEstimator();
   setupSearchSuggestions();
   setupFaqAccordion();
+  setupMerchShop();
 
   if (typeof i18next !== 'undefined') {
     i18next
@@ -1435,7 +1429,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
   }
-}
+});
 
 function setupOrderFeatures() {
   const menuItems = document.querySelectorAll(".menu-item");
@@ -2005,6 +1999,8 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.style.display = "none";
     }
   });
+});
+
 // Feature 9: Live Table Availability Estimator
 // =============================================
 function setupTableAvailabilityEstimator() {
@@ -2064,6 +2060,8 @@ function setupTableAvailabilityEstimator() {
       }, 0);
     });
   }
+}
+
 // Feature 10: Search Suggestions Handler
 // =============================================
 function setupSearchSuggestions() {
@@ -2076,6 +2074,10 @@ function setupSearchSuggestions() {
     chip.addEventListener("click", () => {
       searchInput.value = chip.dataset.query;
       searchInput.dispatchEvent(new Event("input"));
+    });
+  });
+}
+
 // Feature 9: Reservation Success & Calendar Integration
 // =============================================
 function showReservationSuccessModal(date, time, guests) {
@@ -2145,6 +2147,8 @@ END:VCALENDAR`;
   };
 
   modal.style.display = "block";
+}
+
 // Feature 11: Scroll Reveal & Autoplay
 // =============================================
 function setupIntersectionObserver() {
@@ -2210,6 +2214,9 @@ function setupAutoScroll() {
   grid.addEventListener("touchstart", stopAutoplay, { passive: true });
   grid.addEventListener("touchend", () => {
     if (isScrollable()) startAutoplay();
+  });
+}
+
 // Feature 6: Interactive FAQ Accordion
 // =============================================
 function setupFaqAccordion() {
@@ -2228,6 +2235,89 @@ function setupFaqAccordion() {
     });
   });
 }
+
+// =============================================
+// Feature 10: Lighthouse Gourmet Merch & Pantry Shop Simulator
+// =============================================
+function setupMerchShop() {
+  const tabs = document.querySelectorAll(".merch-tab-btn");
+  const cards = document.querySelectorAll(".merch-card");
+  const addBtns = document.querySelectorAll(".add-merch-btn");
+
+  if (!tabs.length || !cards.length) return;
+
+  // Handle Tab Filtering
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => {
+        t.classList.remove("active");
+        t.style.background = "transparent";
+        t.style.color = "var(--color-text-muted)";
+      });
+      tab.classList.add("active");
+      tab.style.background = "var(--color-primary)";
+      tab.style.color = "#000";
+
+      const cat = tab.dataset.cat;
+      cards.forEach(card => {
+        if (cat === "all" || card.dataset.category === cat) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  });
+
+  // Handle Add to Cart Buttons
+  addBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      const title = btn.dataset.title;
+      const price = parseFloat(btn.dataset.price) || 0;
+
+      const existing = cart.find(c => c.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          id,
+          title,
+          price,
+          qty: 1
+        });
+      }
+
+      saveList("lighthouse_cart", cart);
+
+      // Force update of cart UI
+      const cartList = document.querySelector("#cartView .order-list");
+      if (cartList) {
+        if (cart.length === 0) {
+          cartList.innerHTML = `<div class="order-empty">Your cart is empty.</div>`;
+        } else {
+          cartList.innerHTML = cart.map(item => `
+            <div class="order-item">
+              <div>
+                <strong>${item.title}</strong>
+                <br>
+                <span style="font-size: 0.8rem; color: var(--color-text-muted);">₹${item.price} x ${item.qty} = ₹${item.price * item.qty}</span>
+              </div>
+              <div class="qty-control" style="display: flex; gap: 8px; align-items: center;">
+                <button type="button" class="btn btn-outline btn-sm" style="padding: 2px 8px; font-size: 0.8rem;" onclick="window.updateCartQty('${item.id}', -1)">-</button>
+                <span style="font-size: 0.9rem; color: #fff;">${item.qty}</span>
+                <button type="button" class="btn btn-outline btn-sm" style="padding: 2px 8px; font-size: 0.8rem;" onclick="window.updateCartQty('${item.id}', 1)">+</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      alert(`Added ${title} to your shopping cart!`);
+    });
+  });
+}
+
 // PDF MENU DOWNLOAD
 // =============================================
 function loadHtml2Pdf() {
@@ -2373,6 +2463,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupGiftCardCustomizer();
   setupVirtualSommelier();
   setupLoyaltyClub();
+  setupMerchShop();
 
   // i18next Setup
   if (typeof i18next !== 'undefined' && typeof i18nextHttpBackend !== 'undefined' && typeof i18nextBrowserLanguageDetector !== 'undefined') {
