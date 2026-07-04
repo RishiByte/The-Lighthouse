@@ -2000,6 +2000,71 @@ END:VCALENDAR`;
   };
 
   modal.style.display = "block";
+// Feature 11: Scroll Reveal & Autoplay
+// =============================================
+function setupIntersectionObserver() {
+  const reveals = document.querySelectorAll(".reveal");
+  if (!reveals.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px"
+  });
+
+  reveals.forEach((el) => observer.observe(el));
+}
+
+function setupAutoScroll() {
+  const grid = document.getElementById("reviews-grid");
+  if (!grid) return;
+
+  let autoplayTimer = null;
+
+  function startAutoplay() {
+    autoplayTimer = setInterval(() => {
+      const maxScroll = grid.scrollWidth - grid.clientWidth;
+      if (grid.scrollLeft >= maxScroll - 10) {
+        grid.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        grid.scrollBy({ left: 320, behavior: "smooth" });
+      }
+    }, 4000);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+
+  const isScrollable = () => grid.scrollWidth > grid.clientWidth;
+
+  if (isScrollable()) {
+    startAutoplay();
+  }
+
+  window.addEventListener("resize", () => {
+    stopAutoplay();
+    if (isScrollable()) {
+      startAutoplay();
+    }
+  });
+
+  grid.addEventListener("mouseenter", stopAutoplay);
+  grid.addEventListener("mouseleave", () => {
+    if (isScrollable()) startAutoplay();
+  });
+  grid.addEventListener("touchstart", stopAutoplay, { passive: true });
+  grid.addEventListener("touchend", () => {
+    if (isScrollable()) startAutoplay();
 // Feature 6: Interactive FAQ Accordion
 // =============================================
 function setupFaqAccordion() {

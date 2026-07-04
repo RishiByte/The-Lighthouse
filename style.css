@@ -503,39 +503,32 @@ body.light-theme .nav.scrolled .nav-logo {
   transition: all var(--transition);
 }
 
-.theme-toggle-icon {
+.theme-toggle svg {
   position: absolute;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   width: 20px;
   height: 20px;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.theme-toggle-icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.theme-toggle-icon-sun {
+.theme-toggle .sun-icon {
   opacity: 0;
-  transform: scale(0.75) rotate(-35deg);
+  transform: rotate(-90deg) scale(0.6);
 }
 
-.theme-toggle-icon-moon {
+.theme-toggle .moon-icon {
   opacity: 1;
-  transform: scale(1) rotate(0deg);
+  transform: rotate(0deg) scale(1);
 }
 
-body.light-theme .theme-toggle-icon-moon {
+/* Light Theme toggle state */
+body.light-theme .theme-toggle .sun-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+body.light-theme .theme-toggle .moon-icon {
   opacity: 0;
-  transform: scale(0.75) rotate(35deg);
-}
-
-body.light-theme .theme-toggle-icon-sun {
-  opacity: 1;
-  transform: scale(1) rotate(0deg);
+  transform: rotate(90deg) scale(0.6);
 }
 
 .theme-toggle:hover {
@@ -4048,6 +4041,44 @@ body.light-theme .newsletter-form input {
   font-size: 1.1rem;
   color: var(--color-text);
   margin-bottom: 10px;
+/* Scroll Reveal & Autoplay Styles */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Make sure reviews grid on small screen wraps or scrolls horizontally */
+@media (max-width: 992px) {
+  .reviews-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+    padding-bottom: 20px;
+    scrollbar-width: none; /* Hide scrollbar for clean carousel look */
+  }
+  
+  .reviews-grid::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .review-card {
+    min-width: 300px;
+    scroll-snap-align: start;
+    flex: 0 0 calc(50% - 10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .review-card {
+    flex: 0 0 100%;
+  }
 /* FAQ Section Styles */
 .faq-section {
   padding: 80px 0;
