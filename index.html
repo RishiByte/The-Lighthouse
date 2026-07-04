@@ -829,6 +829,146 @@
       
     </section>
 
+    <!-- Interactive Sourcing & Ingredient Journey Map Section -->
+    <section class="sourcing-section reveal" id="sourcing" style="padding: 80px 0; background: #0c0a09; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+      <div class="container">
+        <div class="section-header" style="text-align: center; margin-bottom: 50px;">
+          <span class="section-subtitle" style="color: var(--color-primary); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;">Our Ethics & Origins</span>
+          <h2 class="section-title" style="font-family: var(--font-serif); font-size: 2.5rem; color: #fff; margin-top: 10px;">Interactive Ingredient Journey</h2>
+          <p style="color: var(--color-text-muted); max-width: 600px; margin: 15px auto 0;">Trace the route of our premium signature ingredients from organic farms straight to your plate.</p>
+        </div>
+
+        <div class="sourcing-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;">
+          <!-- Left: Sourcing Interactive Map Visualization -->
+          <div class="sourcing-map-box" style="position: relative; background: #131110; border: 1px solid var(--color-border); border-radius: 12px; padding: 20px; text-align: center; overflow: hidden; height: 420px; display: flex; align-items: center; justify-content: center;">
+            <!-- Abstract Map Graphic / Paths -->
+            <svg class="journey-map-svg" viewBox="0 0 500 400" style="width: 100%; height: 100%; z-index: 1;">
+              <!-- Path lines representing routing -->
+              <path class="journey-path path-kerala" d="M 120 320 Q 200 240 250 180" fill="none" stroke="rgba(201, 169, 98, 0.2)" stroke-width="3" stroke-dasharray="6,6"></path>
+              <path class="journey-path path-shimla" d="M 220 60 Q 230 120 250 180" fill="none" stroke="rgba(201, 169, 98, 0.2)" stroke-width="3" stroke-dasharray="6,6"></path>
+              <path class="journey-path path-gujarat" d="M 80 160 Q 180 170 250 180" fill="none" stroke="rgba(201, 169, 98, 0.2)" stroke-width="3" stroke-dasharray="6,6"></path>
+              <path class="journey-path path-bengal" d="M 400 190 Q 320 185 250 180" fill="none" stroke="rgba(201, 169, 98, 0.2)" stroke-width="3" stroke-dasharray="6,6"></path>
+
+              <!-- Active/animated glowing path overlay -->
+              <path id="active-journey-path" d="" fill="none" stroke="var(--color-primary)" stroke-width="4" style="transition: d 0.8s ease; filter: drop-shadow(0 0 6px var(--color-primary));"></path>
+
+              <!-- Node points -->
+              <!-- Kerala Spices -->
+              <circle class="map-node node-clickable" data-id="kerala" cx="120" cy="320" r="10" fill="#131110" stroke="var(--color-primary)" stroke-width="3" style="cursor: pointer; transition: all 0.3s;"></circle>
+              <text x="120" y="345" fill="#9a958e" font-size="11" text-anchor="middle">Kerala Spices</text>
+
+              <!-- Shimla Apples -->
+              <circle class="map-node node-clickable" data-id="shimla" cx="220" cy="60" r="10" fill="#131110" stroke="var(--color-primary)" stroke-width="3" style="cursor: pointer; transition: all 0.3s;"></circle>
+              <text x="220" y="45" fill="#9a958e" font-size="11" text-anchor="middle">Shimla Orchards</text>
+
+              <!-- Organic Dairy Gujarat -->
+              <circle class="map-node node-clickable" data-id="gujarat" cx="80" cy="160" r="10" fill="#131110" stroke="var(--color-primary)" stroke-width="3" style="cursor: pointer; transition: all 0.3s;"></circle>
+              <text x="80" y="140" fill="#9a958e" font-size="11" text-anchor="middle">Gujarat Dairy</text>
+
+              <!-- Sundarbans Honey -->
+              <circle class="map-node node-clickable" data-id="bengal" cx="400" cy="190" r="10" fill="#131110" stroke="var(--color-primary)" stroke-width="3" style="cursor: pointer; transition: all 0.3s;"></circle>
+              <text x="400" y="215" fill="#9a958e" font-size="11" text-anchor="middle">Sundarbans Honey</text>
+
+              <!-- The Lighthouse (Center Destination) -->
+              <circle cx="250" cy="180" r="14" fill="var(--color-primary)" style="filter: drop-shadow(0 0 8px var(--color-primary));"></circle>
+              <text x="250" y="210" fill="#fff" font-weight="bold" font-size="12" text-anchor="middle">THE LIGHTHOUSE</text>
+            </svg>
+            <div style="position: absolute; bottom: 15px; left: 15px; font-size: 0.75rem; color: var(--color-text-muted); pointer-events: none;">
+              📍 Click nodes on the map to trace ingredient path.
+            </div>
+          </div>
+
+          <!-- Right: Journey Info Card -->
+          <div class="sourcing-info-card" style="background: #131110; border: 1px solid var(--color-border); border-radius: 12px; padding: 30px; height: 420px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div id="sourcing-content-default">
+              <h3 style="font-family: var(--font-serif); color: var(--color-primary); font-size: 1.6rem; margin-bottom: 15px;">Trace Our Origins</h3>
+              <p style="color: var(--color-text-muted); line-height: 1.6; margin-bottom: 15px;">Every dish tells a story. Select an ingredient node from the map to explore the farm-to-table transit route, sustainability metrics, and local farmers who make our culinary vision possible.</p>
+              <div style="background: rgba(255,255,255,0.02); border: 1px dashed var(--color-border); padding: 15px; border-radius: 8px; text-align: center;">
+                <span style="font-size: 1.5rem; display: block; margin-bottom: 5px;">🚜</span>
+                <span style="font-size: 0.85rem; color: var(--color-text-muted);">100% Traceable & Sustainably Harvested</span>
+              </div>
+            </div>
+
+            <!-- Kerala spices card (hidden by default) -->
+            <div id="sourcing-card-kerala" class="sourcing-detail-card" style="display: none;">
+              <h3 style="font-family: var(--font-serif); color: var(--color-primary); font-size: 1.6rem; margin-bottom: 10px;">🏝️ Kerala Spice Hills</h3>
+              <p style="font-size: 0.8rem; color: var(--color-primary); text-transform: uppercase; margin-bottom: 15px;">Target Ingredient: Black Cardamom & Saffron</p>
+              <p style="color: var(--color-text-muted); line-height: 1.6; margin-bottom: 15px;">Hand-picked from multi-generation family farms in Wayanad, Kerala. Dried naturally in solar dehydrators to preserve essential oils and rich complex aroma.</p>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div style="background: rgba(201, 169, 98, 0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(201,169,98,0.1);">
+                  <span style="display:block; font-size: 0.75rem; color: var(--color-text-muted);">Carbon Footprint</span>
+                  <strong style="color: #4ade80; font-size: 1.1rem;">-42% reduction</strong>
+                </div>
+                <div style="background: rgba(201, 169, 98, 0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(201,169,98,0.1);">
+                  <span style="display:block; font-size: 0.75rem; color: var(--color-text-muted);">Transit Method</span>
+                  <strong style="color: var(--color-primary); font-size: 0.95rem;">Eco-friendly Rail</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shimla apples card (hidden by default) -->
+            <div id="sourcing-card-shimla" class="sourcing-detail-card" style="display: none;">
+              <h3 style="font-family: var(--font-serif); color: var(--color-primary); font-size: 1.6rem; margin-bottom: 10px;">🏔️ Shimla Highland Orchards</h3>
+              <p style="font-size: 0.8rem; color: var(--color-primary); text-transform: uppercase; margin-bottom: 15px;">Target Ingredient: Crimson Crisp Apples</p>
+              <p style="color: var(--color-text-muted); line-height: 1.6; margin-bottom: 15px;">Harvested at 7,000 feet in the pristine mountain air of Himachal Pradesh. Sourced under fair trade agreements directly compensating local farming families.</p>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div style="background: rgba(201, 169, 98, 0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(201,169,98,0.1);">
+                  <span style="display:block; font-size: 0.75rem; color: var(--color-text-muted);">Carbon Footprint</span>
+                  <strong style="color: #4ade80; font-size: 1.1rem;">Net Zero Transit</strong>
+                </div>
+                <div style="background: rgba(201, 169, 98, 0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(201,169,98,0.1);">
+                  <span style="display:block; font-size: 0.75rem; color: var(--color-text-muted);">Transit Method</span>
+                  <strong style="color: var(--color-primary); font-size: 0.95rem;">Bio-fuel Trucks</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Gujarat Dairy card (hidden by default) -->
+            <div id="sourcing-card-gujarat" class="sourcing-detail-card" style="display: none;">
+              <h3 style="font-family: var(--font-serif); color: var(--color-primary); font-size: 1.6rem; margin-bottom: 10px;">🐄 Gujarat Organic Dairy Coop</h3>
+              <p style="font-size: 0.8rem; color: var(--color-primary); text-transform: uppercase; margin-bottom: 15px;">Target Ingredient: Premium Artisanal Paneer</p>
+              <p style="color: var(--color-text-muted); line-height: 1.6; margin-bottom: 15px;">Made from organic A2 milk from grass-fed Gir cows. Our cooperative partner guarantees ethical animal care standards and pesticide-free fodder.</p>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div style="background: rgba(201, 169, 98, 0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(201,169,98,0.1);">
+                  <span style="display:block; font-size: 0.75rem; color: var(--color-text-muted);">Carbon Footprint</span>
+                  <strong style="color: #4ade80; font-size: 1.1rem;">-30% vs Industry</strong>
+                </div>
+                <div style="background: rgba(201, 169, 98, 0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(201,169,98,0.1);">
+                  <span style="display:block; font-size: 0.75rem; color: var(--color-text-muted);">Transit Method</span>
+                  <strong style="color: var(--color-primary); font-size: 0.95rem;">Electric Cold-chain</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sundarbans Honey card (hidden by default) -->
+            <div id="sourcing-card-bengal" class="sourcing-detail-card" style="display: none;">
+              <h3 style="font-family: var(--font-serif); color: var(--color-primary); font-size: 1.6rem; margin-bottom: 10px;">🐝 Sundarbans Wild Mangrove Honey</h3>
+              <p style="font-size: 0.8rem; color: var(--color-primary); text-transform: uppercase; margin-bottom: 15px;">Target Ingredient: Wild Raw Mangrove Honey</p>
+              <p style="color: var(--color-text-muted); line-height: 1.6; margin-bottom: 15px;">Sustainably collected by local 'Moulis' (honey collectors) in West Bengal. A portion of every purchase funds forest conservation and tiger protect programs.</p>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div style="background: rgba(201, 169, 98, 0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(201,169,98,0.1);">
+                  <span style="display:block; font-size: 0.75rem; color: var(--color-text-muted);">Carbon Footprint</span>
+                  <strong style="color: #4ade80; font-size: 1.1rem;">100% Offset</strong>
+                </div>
+                <div style="background: rgba(201, 169, 98, 0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(201,169,98,0.1);">
+                  <span style="display:block; font-size: 0.75rem; color: var(--color-text-muted);">Transit Method</span>
+                  <strong style="color: var(--color-primary); font-size: 0.95rem;">Eco Cargo</strong>
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size: 0.75rem; color: var(--color-text-muted); border-top: 1px solid var(--color-border); padding-top: 15px; margin-top: 10px; text-align: right;">
+              🥬 Support Local Farming cooperatives
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Reservation Section -->
     <section class="reservation reveal" id="reservation">
     <section class="reservation" id="reservation">
@@ -1519,6 +1659,10 @@
         </div>
         <div style="text-align: center; margin-top: 20px;">
           <button type="button" class="btn btn-primary btn-sm" id="printTicketBtn">Print / Save Ticket</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Reservation Success Modal -->
     <div id="reservation-success-modal" class="reservation-success-modal">
       <div class="success-modal-content">
