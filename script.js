@@ -328,19 +328,13 @@ function getActiveDiet() {
 function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
   const menuItems = document.querySelectorAll('.menu-item');
   let visibleCount = 0;
-  const searchText = menuSearch ? menuSearch.value.trim().toLowerCase() : "";
+  const searchLower = searchText.trim().toLowerCase();
 
   menuItems.forEach((item) => {
     const h3 = item.querySelector('h3');
     const itemName = h3 ? h3.textContent.toLowerCase() : "";
     const category = item.dataset.category || "";
-    const type = item.dataset.type || item.dataset.diet || "all";
-  const searchLower = searchText.toLowerCase();
-
-  menuItems.forEach((item) => {
-    const itemName = (item.querySelector('h3')?.textContent || "").toLowerCase();
-    const category = item.dataset.category || 'all';
-    const itemDiet = item.dataset.diet || item.dataset.type || 'all';
+    const itemDiet = item.dataset.diet || item.dataset.type || "all";
 
     const matchesSearch = itemName.includes(searchLower);
     const matchesFilter = filter === 'all' || category === filter;
@@ -351,15 +345,14 @@ function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
         h3.dataset.original = h3.innerHTML;
       }
       const originalText = h3.dataset.original;
-      if (searchText) {
-        const regex = new RegExp(`(${searchText})`, 'gi');
+      if (searchLower) {
+        const regex = new RegExp(`(${searchLower})`, 'gi');
         h3.innerHTML = originalText.replace(regex, '<span class="search-highlight">$1</span>');
       } else {
         h3.innerHTML = originalText;
       }
     }
 
-    // Use both class manipulation (from HEAD) and display toggle (from main) for robustness
     if (matchesSearch && matchesFilter && matchesDiet) {
       item.classList.remove('hidden-item', 'diet-hidden');
       item.style.display = "";
@@ -1362,6 +1355,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupTableAvailabilityEstimator();
   setupSearchSuggestions();
   setupFaqAccordion();
+  setupBudgetPlanner();
 
   if (typeof i18next !== 'undefined') {
     i18next
@@ -1435,7 +1429,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
   }
-}
+});
 
 function setupOrderFeatures() {
   const menuItems = document.querySelectorAll(".menu-item");
@@ -2005,6 +1999,8 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.style.display = "none";
     }
   });
+});
+
 // Feature 9: Live Table Availability Estimator
 // =============================================
 function setupTableAvailabilityEstimator() {
@@ -2064,6 +2060,8 @@ function setupTableAvailabilityEstimator() {
       }, 0);
     });
   }
+}
+
 // Feature 10: Search Suggestions Handler
 // =============================================
 function setupSearchSuggestions() {
@@ -2076,6 +2074,10 @@ function setupSearchSuggestions() {
     chip.addEventListener("click", () => {
       searchInput.value = chip.dataset.query;
       searchInput.dispatchEvent(new Event("input"));
+    });
+  });
+}
+
 // Feature 9: Reservation Success & Calendar Integration
 // =============================================
 function showReservationSuccessModal(date, time, guests) {
@@ -2145,6 +2147,8 @@ END:VCALENDAR`;
   };
 
   modal.style.display = "block";
+}
+
 // Feature 11: Scroll Reveal & Autoplay
 // =============================================
 function setupIntersectionObserver() {
@@ -2210,6 +2214,9 @@ function setupAutoScroll() {
   grid.addEventListener("touchstart", stopAutoplay, { passive: true });
   grid.addEventListener("touchend", () => {
     if (isScrollable()) startAutoplay();
+  });
+}
+
 // Feature 6: Interactive FAQ Accordion
 // =============================================
 function setupFaqAccordion() {
@@ -2228,6 +2235,229 @@ function setupFaqAccordion() {
     });
   });
 }
+
+// =============================================
+// Feature 6: Smart Group Dining Budget Planner
+// =============================================
+function setupBudgetPlanner() {
+  const calculateBtn = document.getElementById("calculate-group-feast");
+  const addBtn = document.getElementById("add-feast-to-cart");
+  const itemsContainer = document.getElementById("curated-feast-items");
+  const breakdown = document.getElementById("feast-summary-breakdown");
+  const costPerPersonEl = document.getElementById("feast-cost-per-person");
+  const costSubtotalEl = document.getElementById("feast-cost-subtotal");
+  const costDiscountEl = document.getElementById("feast-cost-discount");
+  const costTotalEl = document.getElementById("feast-cost-total");
+
+  if (!calculateBtn || !addBtn || !itemsContainer || !breakdown) return;
+
+  let activePreference = "all";
+  let curatedPackage = null;
+
+  // Handle preference buttons toggles
+  const prefBtns = document.querySelectorAll(".budget-pref-btn");
+  prefBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      prefBtns.forEach(b => {
+        b.classList.remove("active");
+        b.style.borderColor = "var(--color-border)";
+        b.style.background = "transparent";
+        b.style.color = "var(--color-text-muted)";
+      });
+      btn.classList.add("active");
+      btn.style.borderColor = "var(--color-primary)";
+      btn.style.background = "rgba(201, 169, 98, 0.1)";
+      btn.style.color = "var(--color-primary)";
+      activePreference = btn.dataset.pref;
+    });
+  });
+
+  calculateBtn.addEventListener("click", () => {
+    const guests = parseInt(document.getElementById("group-guests").value) || 4;
+    const budget = parseFloat(document.getElementById("group-budget").value) || 600;
+    const includeDessert = document.getElementById("include-dessert").checked;
+    const includeDrink = document.getElementById("include-drink").checked;
+
+    // Get all items in the menu
+    const items = [];
+    document.querySelectorAll(".menu-item").forEach(el => {
+      const title = el.querySelector("h3")?.textContent || "";
+      const priceText = el.querySelector(".price")?.textContent || "0";
+      const price = parseFloat(priceText.replace(/[^\d]/g, "")) || 0;
+      const category = el.dataset.category || "mains";
+      const diet = el.dataset.diet || el.dataset.type || "veg";
+      const id = el.dataset.itemId || title.toLowerCase().replace(/\s+/g, "-");
+      items.push({ id, title, price, category, diet });
+    });
+
+    if (!items.length) {
+      itemsContainer.innerHTML = `<p style="color: var(--color-text-muted); text-align: center;">No menu items found. Please load the menu first.</p>`;
+      return;
+    }
+
+    // Filter by diet
+    let filtered = items;
+    if (activePreference === "veg") {
+      filtered = items.filter(item => item.diet.toLowerCase() === "veg" || item.diet.toLowerCase() === "vegetarian");
+    } else if (activePreference === "nonveg") {
+      filtered = items.filter(item => item.diet.toLowerCase() === "non-veg" || item.diet.toLowerCase() === "nonvegetarian" || item.diet.toLowerCase() === "nonveg");
+    }
+
+    // Group by category
+    const categories = {
+      starters: filtered.filter(i => i.category === "starters" || i.category === "appetizers"),
+      mains: filtered.filter(i => i.category === "mains" || i.category === "main-course"),
+      desserts: filtered.filter(i => i.category === "desserts" || i.category === "dessert"),
+      beverages: filtered.filter(i => i.category === "beverages" || i.category === "drinks"),
+      sides: filtered.filter(i => i.category === "sides" || i.category === "breads" || i.category === "bread")
+    };
+
+    // If a category is empty, fallback to unfiltered
+    Object.keys(categories).forEach(cat => {
+      if (!categories[cat].length) {
+        categories[cat] = items.filter(i => i.category === cat);
+      }
+    });
+
+    // Greedy pick to meet budget per guest
+    let chosen = [];
+    let currentCost = 0;
+
+    // Must-have: Main Course
+    if (categories.mains.length) {
+      const sortedMains = [...categories.mains].sort((a,b) => a.price - b.price);
+      const item = sortedMains[0];
+      chosen.push(item);
+      currentCost += item.price;
+    }
+
+    // Starter
+    if (categories.starters.length) {
+      const sortedStarters = [...categories.starters].sort((a,b) => a.price - b.price);
+      if (currentCost + sortedStarters[0].price <= budget) {
+        const item = sortedStarters[0];
+        chosen.push(item);
+        currentCost += item.price;
+      }
+    }
+
+    // Sides
+    if (categories.sides.length) {
+      const sortedSides = [...categories.sides].sort((a,b) => a.price - b.price);
+      if (currentCost + sortedSides[0].price <= budget) {
+        const item = sortedSides[0];
+        chosen.push(item);
+        currentCost += item.price;
+      }
+    }
+
+    // Dessert
+    if (includeDessert && categories.desserts.length) {
+      const sortedDesserts = [...categories.desserts].sort((a,b) => a.price - b.price);
+      if (currentCost + sortedDesserts[0].price <= budget) {
+        const item = sortedDesserts[0];
+        chosen.push(item);
+        currentCost += item.price;
+      }
+    }
+
+    // Drink
+    if (includeDrink && categories.beverages.length) {
+      const sortedBeverages = [...categories.beverages].sort((a,b) => a.price - b.price);
+      if (currentCost + sortedBeverages[0].price <= budget) {
+        const item = sortedBeverages[0];
+        chosen.push(item);
+        currentCost += item.price;
+      }
+    }
+
+    if (!chosen.length) {
+      itemsContainer.innerHTML = `<p style="color: var(--color-text-muted); text-align: center;">Could not construct package within budget. Try increasing target budget.</p>`;
+      addBtn.disabled = true;
+      breakdown.style.display = "none";
+      return;
+    }
+
+    // Display chosen items
+    itemsContainer.innerHTML = chosen.map(item => `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.9rem;">
+        <div>
+          <span style="color: var(--color-primary); font-weight: bold; margin-right: 5px;">•</span>
+          <span style="color: #fff;">${item.title}</span>
+          <span style="font-size: 0.75rem; color: var(--color-text-muted); margin-left: 8px; text-transform: uppercase;">(${item.category})</span>
+        </div>
+        <span style="color: var(--color-text);">₹${item.price}</span>
+      </div>
+    `).join("");
+
+    // Calculate totals
+    const subtotal = currentCost * guests;
+    const discount = Math.round(subtotal * 0.1);
+    const total = subtotal - discount;
+
+    costPerPersonEl.textContent = `₹${currentCost}`;
+    costSubtotalEl.textContent = `₹${subtotal}`;
+    costDiscountEl.textContent = `-₹${discount}`;
+    costTotalEl.textContent = `₹${total}`;
+
+    breakdown.style.display = "block";
+    addBtn.disabled = false;
+
+    curatedPackage = {
+      title: `Group Feast Package (Party of ${guests})`,
+      price: Math.round(total / guests),
+      qty: guests,
+      items: chosen
+    };
+  });
+
+  addBtn.addEventListener("click", () => {
+    if (!curatedPackage) return;
+    
+    // Add curated items to the global cart
+    curatedPackage.items.forEach(item => {
+      const existing = cart.find(c => c.id === item.id);
+      if (existing) {
+        existing.qty += curatedPackage.qty;
+      } else {
+        cart.push({
+          id: item.id,
+          title: item.title,
+          price: item.price,
+          qty: curatedPackage.qty
+        });
+      }
+    });
+
+    saveList("lighthouse_cart", cart);
+    
+    // Force update of cart UI
+    const cartList = document.querySelector("#cartView .order-list");
+    if (cartList) {
+      if (cart.length === 0) {
+        cartList.innerHTML = `<div class="order-empty">Your cart is empty.</div>`;
+      } else {
+        cartList.innerHTML = cart.map(item => `
+          <div class="order-item">
+            <div>
+              <strong>${item.title}</strong>
+              <br>
+              <span style="font-size: 0.8rem; color: var(--color-text-muted);">₹${item.price} x ${item.qty} = ₹${item.price * item.qty}</span>
+            </div>
+            <div class="qty-control" style="display: flex; gap: 8px; align-items: center;">
+              <button type="button" class="btn btn-outline btn-sm" style="padding: 2px 8px; font-size: 0.8rem;" onclick="window.updateCartQty('${item.id}', -1)">-</button>
+              <span style="font-size: 0.9rem; color: #fff;">${item.qty}</span>
+              <button type="button" class="btn btn-outline btn-sm" style="padding: 2px 8px; font-size: 0.8rem;" onclick="window.updateCartQty('${item.id}', 1)">+</button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    alert(`Successfully added ${curatedPackage.title} to your cart with a 10% cooperative discount!`);
+  });
+}
+
 // PDF MENU DOWNLOAD
 // =============================================
 function loadHtml2Pdf() {
@@ -2373,6 +2603,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupGiftCardCustomizer();
   setupVirtualSommelier();
   setupLoyaltyClub();
+  setupBudgetPlanner();
 
   // i18next Setup
   if (typeof i18next !== 'undefined' && typeof i18nextHttpBackend !== 'undefined' && typeof i18nextBrowserLanguageDetector !== 'undefined') {

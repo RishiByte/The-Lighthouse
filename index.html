@@ -829,6 +829,98 @@
       
     </section>
 
+    <!-- Smart Group Dining Budget Planner Section -->
+    <section class="budget-section reveal" id="budget-planner" style="padding: 80px 0; background: #131110; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+      <div class="container">
+        <div class="section-header" style="text-align: center; margin-bottom: 50px;">
+          <span class="section-subtitle" style="color: var(--color-primary); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;">Feast Planning</span>
+          <h2 class="section-title" style="font-family: var(--font-serif); font-size: 2.5rem; color: #fff; margin-top: 10px;">Smart Group Feast Planner</h2>
+          <p style="color: var(--color-text-muted); max-width: 600px; margin: 15px auto 0;">Plan a flawless family-style dining experience. Tell us your budget and size, and we'll design a customized package.</p>
+        </div>
+
+        <div class="budget-planner-grid" style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: start;">
+          <!-- Left: Settings & Controls -->
+          <div class="budget-settings-box" style="background: #1a1714; border: 1px solid var(--color-border); border-radius: 12px; padding: 30px;">
+            <h3 style="font-family: var(--font-serif); color: var(--color-primary); margin-bottom: 20px; font-size: 1.4rem;">1. Configure Feast Details</h3>
+            
+            <form id="budget-planner-form">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div>
+                  <label style="display: block; font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 8px;">Party Size (Guests)</label>
+                  <input type="number" id="group-guests" min="2" max="50" value="4" style="width: 100%; padding: 12px; background: #0c0a09; border: 1px solid var(--color-border); border-radius: 6px; color: #fff; outline: none; font-size: 0.95rem;">
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 8px;">Budget Per Guest (₹)</label>
+                  <select id="group-budget" style="width: 100%; padding: 12px; background: #0c0a09; border: 1px solid var(--color-border); border-radius: 6px; color: #fff; outline: none; font-size: 0.95rem;">
+                    <option value="350">₹350 (Value Feast)</option>
+                    <option value="600" selected>₹600 (Signature Feast)</option>
+                    <option value="1000">₹1000 (Luxury Feast)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 20px;">
+                <label style="display: block; font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 8px;">Dietary Preference</label>
+                <div style="display: flex; gap: 10px;">
+                  <button type="button" class="budget-pref-btn active" data-pref="all" style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid var(--color-primary); background: rgba(201, 169, 98, 0.1); color: var(--color-primary); cursor: pointer; transition: all 0.3s; font-size: 0.85rem;">All</button>
+                  <button type="button" class="budget-pref-btn" data-pref="veg" style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid var(--color-border); background: transparent; color: var(--color-text-muted); cursor: pointer; transition: all 0.3s; font-size: 0.85rem;">Pure Veg</button>
+                  <button type="button" class="budget-pref-btn" data-pref="nonveg" style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid var(--color-border); background: transparent; color: var(--color-text-muted); cursor: pointer; transition: all 0.3s; font-size: 0.85rem;">Non-Veg</button>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 8px;">Must-Include Categories</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--color-text); cursor: pointer;">
+                    <input type="checkbox" id="include-dessert" checked style="accent-color: var(--color-primary);"> Include Dessert
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--color-text); cursor: pointer;">
+                    <input type="checkbox" id="include-drink" checked style="accent-color: var(--color-primary);"> Include Drinks
+                  </label>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-full" id="calculate-group-feast" style="width: 100%;">⚡ Curate & Optimize Feast</button>
+            </form>
+          </div>
+
+          <!-- Right: Optimized Packages & Summary -->
+          <div class="budget-result-box" style="background: #1a1714; border: 1px solid var(--color-border); border-radius: 12px; padding: 30px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; min-height: 400px;">
+            <div>
+              <h3 style="font-family: var(--font-serif); color: var(--color-primary); margin-bottom: 15px; font-size: 1.4rem;">🎁 Your Curated Menu</h3>
+              
+              <!-- Curated Items List -->
+              <div id="curated-feast-items" style="max-height: 220px; overflow-y: auto; margin-bottom: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 15px;">
+                <p style="color: var(--color-text-muted); font-size: 0.9rem; text-align: center; margin-top: 50px;">Click 'Curate & Optimize Feast' to design a budget package.</p>
+              </div>
+
+              <!-- Cost breakdown -->
+              <div id="feast-summary-breakdown" style="display: none; background: #0c0a09; padding: 15px; border-radius: 8px; border: 1px solid var(--color-border);">
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 6px;">
+                  <span>Per-person Cost</span>
+                  <span id="feast-cost-per-person">₹0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 6px;">
+                  <span>Party Subtotal</span>
+                  <span id="feast-cost-subtotal">₹0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 8px;">
+                  <span>Cooperative Bundle Discount (10%)</span>
+                  <span style="color: #4ade80;" id="feast-cost-discount">-₹0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.05rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+                  <span style="color: #fff;">Final Package Total</span>
+                  <span style="color: var(--color-primary);" id="feast-cost-total">₹0</span>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-outline btn-full" id="add-feast-to-cart" disabled style="width: 100%; margin-top: 20px;">🛒 Add Package to Cart</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Reservation Section -->
     <section class="reservation reveal" id="reservation">
     <section class="reservation" id="reservation">
@@ -1519,6 +1611,10 @@
         </div>
         <div style="text-align: center; margin-top: 20px;">
           <button type="button" class="btn btn-primary btn-sm" id="printTicketBtn">Print / Save Ticket</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Reservation Success Modal -->
     <div id="reservation-success-modal" class="reservation-success-modal">
       <div class="success-modal-content">
