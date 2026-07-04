@@ -39,6 +39,7 @@
           <li><a href="#about" class="nav-link" data-section="about" data-i18n="nav.about">About</a></li>
           <li><a href="#chef" class="nav-link" data-section="chef" data-i18n="nav.chef">Chef's Picks</a></li>
           <li><a href="#menu" class="nav-link" data-section="menu" data-i18n="nav.menu">Menu</a></li>
+          <li><a href="#cocktail-lab" class="nav-link" data-section="cocktail-lab" data-i18n="nav.cocktail_lab">Mixology Lab</a></li>
           <li><a href="#reservation" class="nav-link" data-section="reservation" data-i18n="nav.reservation">Reservations</a></li>
           <li><a href="#reviews" class="nav-link" data-section="reviews" data-i18n="nav.reviews">Reviews</a></li>
           <li><a href="#giftcards" class="nav-link" data-section="giftcards" data-i18n="nav.giftcards">Gift Cards</a></li>
@@ -827,6 +828,76 @@
           
         </div>
       
+    </section>
+
+    <!-- DIY Cocktail Lab Section -->
+    <section class="cocktail-lab-section reveal" id="cocktail-lab">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="lab.label">Interactive Experience</span>
+          <h2 class="section-title" data-i18n="lab.title">DIY Mixology Lab</h2>
+          <p class="section-desc" data-i18n="lab.subtitle" style="max-width: 600px; margin: 0 auto; color: var(--color-text-muted);">
+            Become your own bartender. Select ingredients and a flavor profile, then shake to get a customized beverage recommendation.
+          </p>
+        </div>
+
+        <div class="lab-grid">
+          <!-- Ingredients customizer card -->
+          <div class="lab-card">
+            <h3 data-i18n="lab.ingredients_title">Choose Ingredients</h3>
+            <div class="ingredients-selector" style="margin-top: 20px;">
+              <div class="ingredient-checkbox">
+                <input type="checkbox" id="ing-lime" value="lime" checked />
+                <label for="ing-lime">Fresh Lime Juice 🍋</label>
+              </div>
+              <div class="ingredient-checkbox" style="margin-top: 10px;">
+                <input type="checkbox" id="ing-mint" value="mint" checked />
+                <label for="ing-mint">Fresh Mint Leaves 🍃</label>
+              </div>
+              <div class="ingredient-checkbox" style="margin-top: 10px;">
+                <input type="checkbox" id="ing-ginger" value="ginger" />
+                <label for="ing-ginger">Spiced Ginger Beer 🫚</label>
+              </div>
+              <div class="ingredient-checkbox" style="margin-top: 10px;">
+                <input type="checkbox" id="ing-cranberry" value="cranberry" />
+                <label for="ing-cranberry">Tart Cranberry Juice 🍒</label>
+              </div>
+              <div class="ingredient-checkbox" style="margin-top: 10px;">
+                <input type="checkbox" id="ing-soda" value="soda" checked />
+                <label for="ing-soda">Fizzy Club Soda 🫧</label>
+              </div>
+              <div class="ingredient-checkbox" style="margin-top: 10px;">
+                <input type="checkbox" id="ing-syrup" value="syrup" />
+                <label for="ing-syrup">Premium Saffron Syrup 🍯</label>
+              </div>
+            </div>
+
+            <div class="form-group full-width" style="margin-top: 25px;">
+              <label for="lab-profile" data-i18n="lab.select_profile">Select Taste Profile</label>
+              <select id="lab-profile">
+                <option value="refreshing">Refreshing & Citric</option>
+                <option value="sweet">Sweet & Aromatic</option>
+                <option value="fizzy">Fizzy & Spiced</option>
+                <option value="bold">Bold & Tart</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-full" id="shake-shaker-btn" data-i18n="lab.shake_btn" style="margin-top: 25px;">Shake & Craft Drink</button>
+          </div>
+
+          <!-- Live Shaker & Recommendation Card -->
+          <div class="lab-card preview-card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 380px;">
+            <div id="shaker-visual-container" class="shaker-visual-container">
+              <!-- Animated cocktail shaker -->
+              <div class="shaker-icon" id="shaker-icon">🫙</div>
+            </div>
+            
+            <div class="recipe-suggestion" id="recipe-suggestion" style="display: none; text-align: center; margin-top: 20px; animation: scaleUp 0.3s ease forwards;">
+              <!-- suggestion card filled dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Reservation Section -->

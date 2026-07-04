@@ -328,19 +328,13 @@ function getActiveDiet() {
 function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
   const menuItems = document.querySelectorAll('.menu-item');
   let visibleCount = 0;
-  const searchText = menuSearch ? menuSearch.value.trim().toLowerCase() : "";
+  const searchLower = searchText.trim().toLowerCase();
 
   menuItems.forEach((item) => {
     const h3 = item.querySelector('h3');
     const itemName = h3 ? h3.textContent.toLowerCase() : "";
     const category = item.dataset.category || "";
-    const type = item.dataset.type || item.dataset.diet || "all";
-  const searchLower = searchText.toLowerCase();
-
-  menuItems.forEach((item) => {
-    const itemName = (item.querySelector('h3')?.textContent || "").toLowerCase();
-    const category = item.dataset.category || 'all';
-    const itemDiet = item.dataset.diet || item.dataset.type || 'all';
+    const itemDiet = item.dataset.diet || item.dataset.type || "all";
 
     const matchesSearch = itemName.includes(searchLower);
     const matchesFilter = filter === 'all' || category === filter;
@@ -351,15 +345,14 @@ function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
         h3.dataset.original = h3.innerHTML;
       }
       const originalText = h3.dataset.original;
-      if (searchText) {
-        const regex = new RegExp(`(${searchText})`, 'gi');
+      if (searchLower) {
+        const regex = new RegExp(`(${searchLower})`, 'gi');
         h3.innerHTML = originalText.replace(regex, '<span class="search-highlight">$1</span>');
       } else {
         h3.innerHTML = originalText;
       }
     }
 
-    // Use both class manipulation (from HEAD) and display toggle (from main) for robustness
     if (matchesSearch && matchesFilter && matchesDiet) {
       item.classList.remove('hidden-item', 'diet-hidden');
       item.style.display = "";
@@ -1359,6 +1352,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupGiftCardCustomizer();
   setupVirtualSommelier();
   setupLoyaltyClub();
+  setupCocktailLab();
   setupTableAvailabilityEstimator();
   setupSearchSuggestions();
   setupFaqAccordion();
@@ -1435,7 +1429,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
   }
-}
+});
 
 function setupOrderFeatures() {
   const menuItems = document.querySelectorAll(".menu-item");
@@ -2005,6 +1999,8 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.style.display = "none";
     }
   });
+});
+
 // Feature 9: Live Table Availability Estimator
 // =============================================
 function setupTableAvailabilityEstimator() {
@@ -2064,6 +2060,8 @@ function setupTableAvailabilityEstimator() {
       }, 0);
     });
   }
+}
+
 // Feature 10: Search Suggestions Handler
 // =============================================
 function setupSearchSuggestions() {
@@ -2076,6 +2074,10 @@ function setupSearchSuggestions() {
     chip.addEventListener("click", () => {
       searchInput.value = chip.dataset.query;
       searchInput.dispatchEvent(new Event("input"));
+    });
+  });
+}
+
 // Feature 9: Reservation Success & Calendar Integration
 // =============================================
 function showReservationSuccessModal(date, time, guests) {
@@ -2145,6 +2147,8 @@ END:VCALENDAR`;
   };
 
   modal.style.display = "block";
+}
+
 // Feature 11: Scroll Reveal & Autoplay
 // =============================================
 function setupIntersectionObserver() {
@@ -2210,6 +2214,9 @@ function setupAutoScroll() {
   grid.addEventListener("touchstart", stopAutoplay, { passive: true });
   grid.addEventListener("touchend", () => {
     if (isScrollable()) startAutoplay();
+  });
+}
+
 // Feature 6: Interactive FAQ Accordion
 // =============================================
 function setupFaqAccordion() {
@@ -2228,6 +2235,66 @@ function setupFaqAccordion() {
     });
   });
 }
+
+// =============================================
+// Feature 2: DIY Cocktail Lab
+// =============================================
+function setupCocktailLab() {
+  const shakeBtn = document.getElementById("shake-shaker-btn");
+  const shakerIcon = document.getElementById("shaker-icon");
+  const suggestionContainer = document.getElementById("recipe-suggestion");
+  const profileSelect = document.getElementById("lab-profile");
+
+  if (!shakeBtn || !shakerIcon || !suggestionContainer) return;
+
+  const drinkRecipes = {
+    refreshing: {
+      name: "Coastal Mint Cooler",
+      desc: "A bright, zesty fusion of fresh garden mint, cold-pressed key lime, and carbonated club soda, garnished with a slice of lime.",
+      type: "Mocktail"
+    },
+    sweet: {
+      name: "Saffron Ambrosia",
+      desc: "Rich, floral saffron simple syrup muddled with fresh mint leaves and key lime, finished with mineral soda water.",
+      type: "Signature Elixir"
+    },
+    fizzy: {
+      name: "Ginger Lighthouse Fizz",
+      desc: "Spiced ginger beer meets fresh lime juice and club soda for an effervescent kick that awakens the palate.",
+      type: "Spiced Mocktail"
+    },
+    bold: {
+      name: "Ruby Crimson Splash",
+      desc: "Tart cranberry juice mixed with sweet saffron syrup, muddled mint, and club soda, creating a luxurious ruby-toned digestif.",
+      type: "Premium Beverage"
+    }
+  };
+
+  shakeBtn.addEventListener("click", () => {
+    suggestionContainer.style.display = "none";
+    shakerIcon.classList.add("shaking");
+    shakeBtn.disabled = true;
+    shakeBtn.textContent = "Shaking & Mixing...";
+
+    setTimeout(() => {
+      shakerIcon.classList.remove("shaking");
+      shakeBtn.disabled = false;
+      shakeBtn.textContent = "Shake & Craft Drink";
+
+      const profile = profileSelect.value || "refreshing";
+      const recipe = drinkRecipes[profile];
+
+      suggestionContainer.innerHTML = `
+        <span class="suggestion-meta">${recipe.type}</span>
+        <h4 class="suggestion-title" style="margin-top:10px;">${recipe.name}</h4>
+        <p class="suggestion-description">${recipe.desc}</p>
+        <p style="font-size:0.8rem; color:var(--color-primary); margin-top:10px;">✨ Prepared with your selected ingredients! Enjoy.</p>
+      `;
+      suggestionContainer.style.display = "block";
+    }, 1500);
+  });
+}
+
 // PDF MENU DOWNLOAD
 // =============================================
 function loadHtml2Pdf() {
@@ -2373,6 +2440,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupGiftCardCustomizer();
   setupVirtualSommelier();
   setupLoyaltyClub();
+  setupCocktailLab();
 
   // i18next Setup
   if (typeof i18next !== 'undefined' && typeof i18nextHttpBackend !== 'undefined' && typeof i18nextBrowserLanguageDetector !== 'undefined') {
