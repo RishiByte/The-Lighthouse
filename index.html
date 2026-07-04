@@ -829,6 +829,79 @@
       
     </section>
 
+    <!-- Restaurant History & Heritage Timeline Section -->
+    <section class="heritage-section reveal" id="heritage" style="padding: 80px 0; background: #0c0a09; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+      <div class="container">
+        <div class="section-header" style="text-align: center; margin-bottom: 40px;">
+          <span class="section-subtitle" style="color: var(--color-primary); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;">Our Story</span>
+          <h2 class="section-title" style="font-family: var(--font-serif); font-size: 2.5rem; color: #fff; margin-top: 10px;">The Lighthouse Legacy</h2>
+          
+          <!-- View Toggle -->
+          <div style="display: inline-flex; background: #131110; border: 1px solid var(--color-border); padding: 4px; border-radius: 30px; margin-top: 20px;">
+            <button id="toggle-timeline-view" class="active" style="border: none; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.3s; background: var(--color-primary); color: #000;">Timeline View</button>
+            <button id="toggle-story-grid" style="border: none; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.3s; background: transparent; color: var(--color-text-muted);">Story Grid</button>
+          </div>
+        </div>
+
+        <!-- Timeline Container -->
+        <div id="heritage-timeline-container" style="position: relative; max-width: 800px; margin: 40px auto 0; padding-left: 30px; border-left: 2px solid rgba(201, 169, 98, 0.2);">
+          
+          <!-- Milestone 1 -->
+          <div class="milestone-item" data-year="2012" style="position: relative; margin-bottom: 40px; cursor: pointer;">
+            <div style="position: absolute; left: -41px; top: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--color-primary); border: 4px solid #0c0a09; transition: all 0.3s;" class="milestone-dot"></div>
+            <div style="background: #131110; border: 1px solid var(--color-border); border-radius: 8px; padding: 20px; transition: all 0.3s;" class="milestone-card">
+              <span style="font-family: var(--font-serif); font-weight: bold; color: var(--color-primary); font-size: 1.3rem;">2012 — The Genesis</span>
+              <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 8px; line-height: 1.5;">Chef Anushka S. founded The Lighthouse as a cozy 5-table dining spot overlooking the ocean harbor with a vision to redefine traditional spices.</p>
+              <div class="milestone-details" style="display: none; margin-top: 15px; border-top: 1px solid var(--color-border); padding-top: 15px; animation: fadeIn 0.4s ease;">
+                <span style="color: var(--color-primary); font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px;">🎖️ FUN FACT</span>
+                <p style="font-size: 0.85rem; color: var(--color-text); line-height: 1.5;">Our signature Saffron Rasmalai was created in our very first week of testing, and remains unchanged to this day!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Milestone 2 -->
+          <div class="milestone-item" data-year="2016" style="position: relative; margin-bottom: 40px; cursor: pointer;">
+            <div style="position: absolute; left: -41px; top: 0; width: 20px; height: 20px; border-radius: 50%; background: #131110; border: 4px solid #0c0a09; transition: all 0.3s;" class="milestone-dot"></div>
+            <div style="background: #131110; border: 1px solid var(--color-border); border-radius: 8px; padding: 20px; transition: all 0.3s;" class="milestone-card">
+              <span style="font-family: var(--font-serif); font-weight: bold; color: var(--color-primary); font-size: 1.3rem;">2016 — Michelin Recommendation</span>
+              <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 8px; line-height: 1.5;">The Lighthouse received its first Michelin Guide Recommendation, cementing its status as an essential culinary destination.</p>
+              <div class="milestone-details" style="display: none; margin-top: 15px; border-top: 1px solid var(--color-border); padding-top: 15px; animation: fadeIn 0.4s ease;">
+                <span style="color: var(--color-primary); font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px;">🍽️ FEATURED SPECIAL</span>
+                <p style="font-size: 0.85rem; color: var(--color-text); line-height: 1.5;">Our Slow-Cooked Chicken Makhani gained legendary status, praised by reviewers for its velvet butter gravy texture.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Milestone 3 -->
+          <div class="milestone-item" data-year="2021" style="position: relative; margin-bottom: 40px; cursor: pointer;">
+            <div style="position: absolute; left: -41px; top: 0; width: 20px; height: 20px; border-radius: 50%; background: #131110; border: 4px solid #0c0a09; transition: all 0.3s;" class="milestone-dot"></div>
+            <div style="background: #131110; border: 1px solid var(--color-border); border-radius: 8px; padding: 20px; transition: all 0.3s;" class="milestone-card">
+              <span style="font-family: var(--font-serif); font-weight: bold; color: var(--color-primary); font-size: 1.3rem;">2021 — 100% Organic Shift</span>
+              <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 8px; line-height: 1.5;">We partnered with local farming cooperatives across India, shifting to entirely traceable, chemical-free organic ingredients.</p>
+              <div class="milestone-details" style="display: none; margin-top: 15px; border-top: 1px solid var(--color-border); padding-top: 15px; animation: fadeIn 0.4s ease;">
+                <span style="color: var(--color-primary); font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px;">🌱 GREEN COMMITMENT</span>
+                <p style="font-size: 0.85rem; color: var(--color-text); line-height: 1.5;">This transition supported over 120 family-owned micro-farms, introducing fair trade principles to our supply line.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Milestone 4 -->
+          <div class="milestone-item" data-year="2026" style="position: relative; cursor: pointer;">
+            <div style="position: absolute; left: -41px; top: 0; width: 20px; height: 20px; border-radius: 50%; background: #131110; border: 4px solid #0c0a09; transition: all 0.3s;" class="milestone-dot"></div>
+            <div style="background: #131110; border: 1px solid var(--color-border); border-radius: 8px; padding: 20px; transition: all 0.3s;" class="milestone-card">
+              <span style="font-family: var(--font-serif); font-weight: bold; color: var(--color-primary); font-size: 1.3rem;">2026 — Carbon Net Zero Journey</span>
+              <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 8px; line-height: 1.5;">Launching electric delivery fleets, local green sourcing, and setting up solar cookers to achieve verified carbon-neutral fine dining.</p>
+              <div class="milestone-details" style="display: none; margin-top: 15px; border-top: 1px solid var(--color-border); padding-top: 15px; animation: fadeIn 0.4s ease;">
+                <span style="color: var(--color-primary); font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px;">🔋 FUTURE VISION</span>
+                <p style="font-size: 0.85rem; color: var(--color-text); line-height: 1.5;">Pioneering eco-gastronomy without compromising on our luxury culinary flavor profiles.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <!-- Reservation Section -->
     <section class="reservation reveal" id="reservation">
     <section class="reservation" id="reservation">
@@ -1519,6 +1592,10 @@
         </div>
         <div style="text-align: center; margin-top: 20px;">
           <button type="button" class="btn btn-primary btn-sm" id="printTicketBtn">Print / Save Ticket</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Reservation Success Modal -->
     <div id="reservation-success-modal" class="reservation-success-modal">
       <div class="success-modal-content">
