@@ -829,6 +829,56 @@
       
     </section>
 
+    <!-- Chef's Surprise Slot Machine Section -->
+    <section class="surprise-section reveal" id="chef-surprise" style="padding: 80px 0; background: #0c0a09; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+      <div class="container" style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <div class="section-header" style="margin-bottom: 40px;">
+          <span class="section-subtitle" style="color: var(--color-primary); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;">Undecided?</span>
+          <h2 class="section-title" style="font-family: var(--font-serif); font-size: 2.5rem; color: #fff; margin-top: 10px;">Chef's Surprise Slot Machine</h2>
+          <p style="color: var(--color-text-muted); max-width: 500px; margin: 15px auto 0;">Can't decide what to order? Let the Chef pick! Spin the wheel to get a mystery culinary masterwork.</p>
+        </div>
+
+        <div class="slot-machine-container" style="background: #131110; border: 2px solid var(--color-primary); border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden; max-width: 550px; margin: 0 auto;">
+          <!-- Slot Reels Window -->
+          <div class="reels-window" style="background: #000; border: 3px solid var(--color-border); border-radius: 8px; height: 120px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 30px;">
+            <div id="reel-strip" style="position: absolute; width: 100%; transition: top 0s ease; top: 0; display: flex; flex-direction: column; align-items: center;">
+              <!-- Initially filled with placeholders, will spin dynamically -->
+              <div class="reel-item" style="height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <span style="font-size: 3rem;">❓</span>
+                <span style="color: var(--color-primary); font-family: var(--font-serif); font-weight: bold; margin-top: 5px;">What's Cooking?</span>
+              </div>
+            </div>
+            <!-- Glass Overlay Reflection -->
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 100%); pointer-events: none; border-radius: 6px;"></div>
+          </div>
+
+          <!-- Spin Button & Filters -->
+          <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 20px;">
+            <select id="surprise-filter" style="padding: 10px 15px; background: #1a1714; border: 1px solid var(--color-border); border-radius: 6px; color: #fff; outline: none; font-size: 0.9rem;">
+              <option value="all">Any Category</option>
+              <option value="starters">Appetizers</option>
+              <option value="mains">Main Course</option>
+              <option value="desserts">Dessert</option>
+            </select>
+
+            <button type="button" class="btn btn-primary" id="spin-surprise-btn" style="padding: 12px 30px; font-weight: bold; letter-spacing: 1px;">🎰 SPIN THE REEL</button>
+          </div>
+
+          <!-- Spin Result Panel -->
+          <div id="surprise-result-panel" style="display: none; background: rgba(201, 169, 98, 0.05); border: 1px solid rgba(201, 169, 98, 0.2); border-radius: 8px; padding: 20px; animation: fadeIn 0.5s ease; text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+              <span id="surprise-res-cat" style="background: rgba(201,169,98,0.1); color: var(--color-primary); font-size: 0.75rem; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; font-weight: 600;">Main Course</span>
+              <span id="surprise-res-price" style="font-weight: bold; color: var(--color-primary); font-size: 1.1rem;">₹299</span>
+            </div>
+            <h3 id="surprise-res-title" style="font-family: var(--font-serif); font-size: 1.4rem; color: #fff; margin-bottom: 8px;">Signature Paneer Makhani</h3>
+            <p id="surprise-res-desc" style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.5; margin-bottom: 15px;">Rich and buttery organic paneer cooked in light saffron tomato cream sauce.</p>
+            
+            <button type="button" class="btn btn-outline btn-full" id="add-surprise-to-cart" style="width: 100%;">🛒 Order Mystery Special</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Reservation Section -->
     <section class="reservation reveal" id="reservation">
     <section class="reservation" id="reservation">
@@ -1519,6 +1569,10 @@
         </div>
         <div style="text-align: center; margin-top: 20px;">
           <button type="button" class="btn btn-primary btn-sm" id="printTicketBtn">Print / Save Ticket</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Reservation Success Modal -->
     <div id="reservation-success-modal" class="reservation-success-modal">
       <div class="success-modal-content">
