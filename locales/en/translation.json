@@ -13,7 +13,8 @@
     "location": "Location",
     "book_table": "Book a Table",
     "giftcards": "Gift Cards",
-    "loyalty": "Lighthouse Club"
+    "loyalty": "Lighthouse Club",
+    "private_events": "Private Events"
   },
   "hero": {
     "tagline": "Est. 1987",

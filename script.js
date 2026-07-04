@@ -328,19 +328,13 @@ function getActiveDiet() {
 function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
   const menuItems = document.querySelectorAll('.menu-item');
   let visibleCount = 0;
-  const searchText = menuSearch ? menuSearch.value.trim().toLowerCase() : "";
+  const searchLower = searchText.trim().toLowerCase();
 
   menuItems.forEach((item) => {
     const h3 = item.querySelector('h3');
     const itemName = h3 ? h3.textContent.toLowerCase() : "";
     const category = item.dataset.category || "";
-    const type = item.dataset.type || item.dataset.diet || "all";
-  const searchLower = searchText.toLowerCase();
-
-  menuItems.forEach((item) => {
-    const itemName = (item.querySelector('h3')?.textContent || "").toLowerCase();
-    const category = item.dataset.category || 'all';
-    const itemDiet = item.dataset.diet || item.dataset.type || 'all';
+    const itemDiet = item.dataset.diet || item.dataset.type || "all";
 
     const matchesSearch = itemName.includes(searchLower);
     const matchesFilter = filter === 'all' || category === filter;
@@ -351,15 +345,14 @@ function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
         h3.dataset.original = h3.innerHTML;
       }
       const originalText = h3.dataset.original;
-      if (searchText) {
-        const regex = new RegExp(`(${searchText})`, 'gi');
+      if (searchLower) {
+        const regex = new RegExp(`(${searchLower})`, 'gi');
         h3.innerHTML = originalText.replace(regex, '<span class="search-highlight">$1</span>');
       } else {
         h3.innerHTML = originalText;
       }
     }
 
-    // Use both class manipulation (from HEAD) and display toggle (from main) for robustness
     if (matchesSearch && matchesFilter && matchesDiet) {
       item.classList.remove('hidden-item', 'diet-hidden');
       item.style.display = "";
@@ -1435,7 +1428,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
   }
-}
+});
 
 function setupOrderFeatures() {
   const menuItems = document.querySelectorAll(".menu-item");
@@ -2005,6 +1998,8 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.style.display = "none";
     }
   });
+});
+
 // Feature 9: Live Table Availability Estimator
 // =============================================
 function setupTableAvailabilityEstimator() {
@@ -2064,6 +2059,8 @@ function setupTableAvailabilityEstimator() {
       }, 0);
     });
   }
+}
+
 // Feature 10: Search Suggestions Handler
 // =============================================
 function setupSearchSuggestions() {
@@ -2076,6 +2073,10 @@ function setupSearchSuggestions() {
     chip.addEventListener("click", () => {
       searchInput.value = chip.dataset.query;
       searchInput.dispatchEvent(new Event("input"));
+    });
+  });
+}
+
 // Feature 9: Reservation Success & Calendar Integration
 // =============================================
 function showReservationSuccessModal(date, time, guests) {
@@ -2145,6 +2146,8 @@ END:VCALENDAR`;
   };
 
   modal.style.display = "block";
+}
+
 // Feature 11: Scroll Reveal & Autoplay
 // =============================================
 function setupIntersectionObserver() {
@@ -2210,6 +2213,9 @@ function setupAutoScroll() {
   grid.addEventListener("touchstart", stopAutoplay, { passive: true });
   grid.addEventListener("touchend", () => {
     if (isScrollable()) startAutoplay();
+  });
+}
+
 // Feature 6: Interactive FAQ Accordion
 // =============================================
 function setupFaqAccordion() {
@@ -2228,6 +2234,154 @@ function setupFaqAccordion() {
     });
   });
 }
+
+// =============================================
+// Feature 1: Private Event Customizer
+// =============================================
+function setupEventCustomizer() {
+  const spaceSelect = document.getElementById("event-space");
+  const packageSelect = document.getElementById("event-package");
+  const guestsInput = document.getElementById("event-guests");
+  const layoutBtns = document.querySelectorAll(".layout-btn");
+  const rentalCostEl = document.getElementById("rental-cost");
+  const cateringCostEl = document.getElementById("catering-cost");
+  const totalCostEl = document.getElementById("event-total-cost");
+  const visualPreview = document.getElementById("layout-preview-visual");
+  const bookBtn = document.getElementById("event-book-btn");
+
+  if (!spaceSelect || !packageSelect || !guestsInput || !totalCostEl || !visualPreview) return;
+
+  let currentLayout = "banquet";
+
+  layoutBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      layoutBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentLayout = btn.dataset.layout;
+      updateEventPreview();
+    });
+  });
+
+  if (spaceSelect && packageSelect && guestsInput) {
+    [spaceSelect, packageSelect, guestsInput].forEach(el => {
+      el.addEventListener("change", updateEventCosts);
+      el.addEventListener("input", updateEventCosts);
+    });
+  }
+
+  function updateEventCosts() {
+    const spacePrice = parseInt(spaceSelect.options[spaceSelect.selectedIndex].dataset.price || 0);
+    const packagePrice = parseInt(packageSelect.options[packageSelect.selectedIndex].dataset.price || 0);
+    const guests = Math.max(10, Math.min(200, parseInt(guestsInput.value || 10)));
+    
+    const rentalCost = spacePrice;
+    const cateringCost = packagePrice * guests;
+    const totalCost = rentalCost + cateringCost;
+
+    rentalCostEl.textContent = `₹${rentalCost.toLocaleString("en-IN")}`;
+    cateringCostEl.textContent = `₹${cateringCost.toLocaleString("en-IN")}`;
+    totalCostEl.textContent = `₹${totalCost.toLocaleString("en-IN")}`;
+
+    updateEventPreview();
+  }
+
+  function updateEventPreview() {
+    visualPreview.innerHTML = "";
+    
+    // Add central stage/podium element
+    const stage = document.createElement("div");
+    stage.style.cssText = "position:absolute; width:60px; height:25px; background:#33291d; border:1px solid var(--color-primary); border-radius:4px; top:15px; display:flex; align-items:center; justify-content:center; font-size:0.65rem; color:var(--color-primary);";
+    stage.textContent = "STAGE";
+    visualPreview.appendChild(stage);
+
+    const containerWidth = visualPreview.clientWidth || 350;
+    const containerHeight = visualPreview.clientHeight || 200;
+
+    if (currentLayout === "banquet") {
+      const tableCoords = [
+        { x: 0.25, y: 0.55 },
+        { x: 0.75, y: 0.55 },
+        { x: 0.5, y: 0.75 }
+      ];
+      tableCoords.forEach((coord) => {
+        const table = document.createElement("div");
+        table.className = "visual-table-node";
+        const tx = coord.x * containerWidth - 12.5;
+        const ty = coord.y * containerHeight - 12.5;
+        table.style.left = `${tx}px`;
+        table.style.top = `${ty}px`;
+        visualPreview.appendChild(table);
+
+        for (let i = 0; i < 6; i++) {
+          const chair = document.createElement("div");
+          chair.className = "visual-chair-node";
+          const angle = (i * 2 * Math.PI) / 6;
+          const cx = tx + 12.5 + Math.cos(angle) * 22 - 4;
+          const cy = ty + 12.5 + Math.sin(angle) * 22 - 4;
+          chair.style.left = `${cx}px`;
+          chair.style.top = `${cy}px`;
+          visualPreview.appendChild(chair);
+        }
+      });
+    } else if (currentLayout === "u-shape") {
+      const nodes = [
+        { x: 0.3, y: 0.45 }, { x: 0.3, y: 0.65 }, { x: 0.3, y: 0.85 },
+        { x: 0.4, y: 0.85 }, { x: 0.5, y: 0.85 }, { x: 0.6, y: 0.85 }, { x: 0.7, y: 0.85 },
+        { x: 0.7, y: 0.65 }, { x: 0.7, y: 0.45 }
+      ];
+      nodes.forEach(coord => {
+        const desk = document.createElement("div");
+        desk.className = "visual-table-node";
+        desk.style.borderRadius = "4px";
+        desk.style.width = "18px";
+        desk.style.height = "18px";
+        const tx = coord.x * containerWidth - 9;
+        const ty = coord.y * containerHeight - 9;
+        desk.style.left = `${tx}px`;
+        desk.style.top = `${ty}px`;
+        visualPreview.appendChild(desk);
+
+        const chair = document.createElement("div");
+        chair.className = "visual-chair-node";
+        let cx = tx + 5;
+        let cy = ty + 5;
+        if (coord.x === 0.3) cx -= 15;
+        else if (coord.x === 0.7) cx += 15;
+        else cy += 15;
+        chair.style.left = `${cx}px`;
+        chair.style.top = `${cy}px`;
+        visualPreview.appendChild(chair);
+      });
+    } else {
+      for (let i = 0; i < 8; i++) {
+        const x = 0.15 + (i % 4) * 0.22 + Math.random() * 0.05;
+        const y = 0.45 + Math.floor(i / 4) * 0.22 + Math.random() * 0.05;
+        const stand = document.createElement("div");
+        stand.className = "visual-table-node";
+        stand.style.width = "15px";
+        stand.style.height = "15px";
+        stand.style.background = "#fff";
+        stand.style.borderColor = "var(--color-primary)";
+        const tx = x * containerWidth - 7.5;
+        const ty = y * containerHeight - 7.5;
+        stand.style.left = `${tx}px`;
+        stand.style.top = `${ty}px`;
+        visualPreview.appendChild(stand);
+      }
+    }
+  }
+
+  if (bookBtn) {
+    bookBtn.addEventListener("click", () => {
+      const spaceName = spaceSelect.options[spaceSelect.selectedIndex].text.split(" (")[0];
+      const total = totalCostEl.textContent;
+      alert(`🎉 Congratulations! Your private event inquiry for the ${spaceName} is received. A sales coordinator will contact you shortly to confirm the total cost of ${total}.`);
+    });
+  }
+
+  updateEventCosts();
+}
+
 // PDF MENU DOWNLOAD
 // =============================================
 function loadHtml2Pdf() {
@@ -2373,6 +2527,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupGiftCardCustomizer();
   setupVirtualSommelier();
   setupLoyaltyClub();
+  setupEventCustomizer();
 
   // i18next Setup
   if (typeof i18next !== 'undefined' && typeof i18nextHttpBackend !== 'undefined' && typeof i18nextBrowserLanguageDetector !== 'undefined') {

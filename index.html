@@ -43,6 +43,7 @@
           <li><a href="#reviews" class="nav-link" data-section="reviews" data-i18n="nav.reviews">Reviews</a></li>
           <li><a href="#giftcards" class="nav-link" data-section="giftcards" data-i18n="nav.giftcards">Gift Cards</a></li>
           <li><a href="#loyalty" class="nav-link" data-section="loyalty" data-i18n="nav.loyalty">Lighthouse Club</a></li>
+          <li><a href="#private-events" class="nav-link" data-section="private-events" data-i18n="nav.private_events">Private Events</a></li>
           <li><a href="#location" class="nav-link" data-section="location" data-i18n="nav.location">Location</a></li>
           <li class="mobile-only nav-lang-item">
             <div class="language-selector-container">
@@ -1204,6 +1205,83 @@
             <button type="button" class="btn btn-outline btn-sm" id="loyalty-logout-btn" style="margin-top: 25px; width: 100%;">Sign Out</button>
           </div>
         </div>
+    </section>
+
+    <!-- Private Events Section -->
+    <section class="private-events reveal" id="private-events">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="events.label">Tailored Celebrations</span>
+          <h2 class="section-title" data-i18n="events.title">Private Events & Banquets</h2>
+          <p class="section-desc" data-i18n="events.subtitle" style="max-width: 600px; margin: 0 auto; color: var(--color-text-muted);">
+            Create unforgettable memories in our exquisite dining spaces. Customize your layout, menu package, and details.
+          </p>
+        </div>
+
+        <div class="events-grid">
+          <!-- Selection panel -->
+          <div class="events-card">
+            <h3 data-i18n="events.config_title">Event Configuration</h3>
+            <form id="events-customizer-form" style="margin-top: 20px;">
+              <div class="form-group full-width">
+                <label for="event-space" data-i18n="events.select_space">Select Event Space</label>
+                <select id="event-space" required>
+                  <option value="grand-hall" data-price="25000">The Grand Hall (Cap: 150) — ₹25,000</option>
+                  <option value="wine-cellar" data-price="15000">The Vintage Wine Cellar (Cap: 40) — ₹15,000</option>
+                  <option value="rooftop" data-price="20000">Ocean View Rooftop (Cap: 80) — ₹20,000</option>
+                </select>
+              </div>
+
+              <div class="form-group full-width" style="margin-top: 15px;">
+                <label data-i18n="events.seating_layout">Choose Seating Layout</label>
+                <div class="layout-options">
+                  <button type="button" class="layout-btn active" data-layout="banquet" data-i18n="events.layout_banquet">Banquet (Round Tables)</button>
+                  <button type="button" class="layout-btn" data-layout="u-shape" data-i18n="events.layout_u_shape">U-Shape (Conference)</button>
+                  <button type="button" class="layout-btn" data-layout="cocktail" data-i18n="events.layout_cocktail">Cocktail (Standing/High Tables)</button>
+                </div>
+              </div>
+
+              <div class="form-group full-width" style="margin-top: 15px;">
+                <label for="event-package" data-i18n="events.catering_package">Catering Package (Per Guest)</label>
+                <select id="event-package" required>
+                  <option value="gold" data-price="2000">Gold Package (Appetizers + Mains + Dessert) — ₹2,000/guest</option>
+                  <option value="platinum" data-price="3500">Platinum Package (Signature Menu + Pairings) — ₹3,500/guest</option>
+                </select>
+              </div>
+
+              <div class="form-group full-width" style="margin-top: 15px;">
+                <label for="event-guests" data-i18n="events.num_guests">Number of Guests</label>
+                <input type="number" id="event-guests" min="10" max="200" value="50" required />
+              </div>
+            </form>
+          </div>
+
+          <!-- Live Preview & Calculation -->
+          <div class="events-card preview-card">
+            <h3 data-i18n="events.preview_title">Live Hall Layout Preview</h3>
+            <div class="layout-preview-visual" id="layout-preview-visual">
+              <!-- Rendered dynamically -->
+            </div>
+            
+            <div class="cost-breakdown" style="margin-top: 25px; border-top: 1px dashed var(--color-border); padding-top: 15px;">
+              <div class="breakdown-row" style="display: flex; justify-content: space-between; font-size: 0.95rem;">
+                <span style="color: var(--color-text-muted);" data-i18n="events.rental_cost">Hall Rental:</span>
+                <span id="rental-cost">₹25,000</span>
+              </div>
+              <div class="breakdown-row" style="display: flex; justify-content: space-between; font-size: 0.95rem; margin-top: 5px;">
+                <span style="color: var(--color-text-muted);" data-i18n="events.catering_cost">Catering & Service:</span>
+                <span id="catering-cost">₹1,00,000</span>
+              </div>
+              <div class="breakdown-row" style="display: flex; justify-content: space-between; font-family: var(--font-serif); font-size: 1.3rem; color: var(--color-primary); margin-top: 15px; border-top: 1px solid var(--color-border); padding-top: 10px;">
+                <span data-i18n="events.total_cost">Total Estimated Cost:</span>
+                <span id="event-total-cost">₹1,25,000</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-full" id="event-book-btn" data-i18n="events.book_btn" style="margin-top: 20px;">Reserve Event Space</button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- FAQ Section -->
