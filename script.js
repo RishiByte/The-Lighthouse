@@ -328,19 +328,13 @@ function getActiveDiet() {
 function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
   const menuItems = document.querySelectorAll('.menu-item');
   let visibleCount = 0;
-  const searchText = menuSearch ? menuSearch.value.trim().toLowerCase() : "";
+  const searchLower = searchText.trim().toLowerCase();
 
   menuItems.forEach((item) => {
     const h3 = item.querySelector('h3');
     const itemName = h3 ? h3.textContent.toLowerCase() : "";
     const category = item.dataset.category || "";
-    const type = item.dataset.type || item.dataset.diet || "all";
-  const searchLower = searchText.toLowerCase();
-
-  menuItems.forEach((item) => {
-    const itemName = (item.querySelector('h3')?.textContent || "").toLowerCase();
-    const category = item.dataset.category || 'all';
-    const itemDiet = item.dataset.diet || item.dataset.type || 'all';
+    const itemDiet = item.dataset.diet || item.dataset.type || "all";
 
     const matchesSearch = itemName.includes(searchLower);
     const matchesFilter = filter === 'all' || category === filter;
@@ -351,15 +345,14 @@ function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
         h3.dataset.original = h3.innerHTML;
       }
       const originalText = h3.dataset.original;
-      if (searchText) {
-        const regex = new RegExp(`(${searchText})`, 'gi');
+      if (searchLower) {
+        const regex = new RegExp(`(${searchLower})`, 'gi');
         h3.innerHTML = originalText.replace(regex, '<span class="search-highlight">$1</span>');
       } else {
         h3.innerHTML = originalText;
       }
     }
 
-    // Use both class manipulation (from HEAD) and display toggle (from main) for robustness
     if (matchesSearch && matchesFilter && matchesDiet) {
       item.classList.remove('hidden-item', 'diet-hidden');
       item.style.display = "";
@@ -892,6 +885,7 @@ function setupReviews() {
   const starBtns = document.querySelectorAll("#star-input .star-btn");
   const ratingInput = document.getElementById("review-rating");
   let selectedRating = 0;
+  let activeTagFilter = "all";
 
   const pinnedReview = {
     name: "Rasshi Srivastav",
@@ -899,6 +893,27 @@ function setupReviews() {
     text: "Absolutely loved the food and ambience! Every dish was crafted with such care and the atmosphere was warm and elegant. A truly memorable dining experience - will definitely be coming back!",
     date: "14 May 2026",
   };
+
+  const sentimentKeywords = {
+    flavor: ["delicious", "tasty", "food", "paneer", "spicy", "aroma", "saffron", "basmati", "chicken", "gourmet", "sweet", "flavor", "taste", "dish"],
+    service: ["service", "waiter", "staff", "hospitality", "chef", "friendly", "polite", "care", "welcome"],
+    ambiance: ["ambiance", "atmosphere", "ambience", "decor", "music", "view", "cozy", "luxury", "vibe", "warm", "elegant"]
+  };
+
+  function analyzeSentimentTags(text) {
+    const lower = text.toLowerCase();
+    const tags = [];
+    if (sentimentKeywords.flavor.some(kw => lower.includes(kw))) {
+      tags.push({ key: "flavor", label: "✨ Rich Aromas" });
+    }
+    if (sentimentKeywords.service.some(kw => lower.includes(kw))) {
+      tags.push({ key: "service", label: "🤵 Service" });
+    }
+    if (sentimentKeywords.ambiance.some(kw => lower.includes(kw))) {
+      tags.push({ key: "ambiance", label: "🕯️ Fine Ambiance" });
+    }
+    return tags;
+  }
 
   function getReviews() {
     try {
@@ -908,13 +923,52 @@ function setupReviews() {
     }
   }
 
+  function updateAnalytics() {
+    const all = [pinnedReview, ...getReviews()];
+    let positive = 0;
+    let flavorCount = 0;
+    let serviceCount = 0;
+    let ambianceCount = 0;
+
+    all.forEach(r => {
+      if (r.rating >= 4) positive++;
+      const tags = analyzeSentimentTags(r.text);
+      tags.forEach(t => {
+        if (t.key === "flavor") flavorCount++;
+        if (t.key === "service") serviceCount++;
+        if (t.key === "ambiance") ambianceCount++;
+      });
+    });
+
+    const ratio = all.length ? Math.round((positive / all.length) * 100) : 100;
+    const overallScoreEl = document.getElementById("overall-sentiment-score");
+    if (overallScoreEl) overallScoreEl.textContent = `${ratio}%`;
+
+    const tagsContainer = document.getElementById("sentiment-tags-container");
+    if (tagsContainer) {
+      tagsContainer.innerHTML = `
+        <span class="sentiment-tag ${activeTagFilter === 'all' ? 'active' : ''}" data-tag="all" style="cursor: pointer; padding: 4px 10px; border-radius: 20px; background: ${activeTagFilter === 'all' ? 'var(--color-primary)' : 'rgba(255,255,255,0.02)'}; color: ${activeTagFilter === 'all' ? '#000' : 'var(--color-text-muted)'}; font-size: 0.75rem; border: 1px solid ${activeTagFilter === 'all' ? 'var(--color-primary)' : 'var(--color-border)'};">All (${all.length})</span>
+        <span class="sentiment-tag ${activeTagFilter === 'flavor' ? 'active' : ''}" data-tag="flavor" style="cursor: pointer; padding: 4px 10px; border-radius: 20px; background: ${activeTagFilter === 'flavor' ? 'var(--color-primary)' : 'rgba(255,255,255,0.02)'}; color: ${activeTagFilter === 'flavor' ? '#000' : 'var(--color-text-muted)'}; font-size: 0.75rem; border: 1px solid ${activeTagFilter === 'flavor' ? 'var(--color-primary)' : 'var(--color-border)'};">Rich Aromas (${flavorCount})</span>
+        <span class="sentiment-tag ${activeTagFilter === 'service' ? 'active' : ''}" data-tag="service" style="cursor: pointer; padding: 4px 10px; border-radius: 20px; background: ${activeTagFilter === 'service' ? 'var(--color-primary)' : 'rgba(255,255,255,0.02)'}; color: ${activeTagFilter === 'service' ? '#000' : 'var(--color-text-muted)'}; font-size: 0.75rem; border: 1px solid ${activeTagFilter === 'service' ? 'var(--color-primary)' : 'var(--color-border)'};">Service (${serviceCount})</span>
+        <span class="sentiment-tag ${activeTagFilter === 'ambiance' ? 'active' : ''}" data-tag="ambiance" style="cursor: pointer; padding: 4px 10px; border-radius: 20px; background: ${activeTagFilter === 'ambiance' ? 'var(--color-primary)' : 'rgba(255,255,255,0.02)'}; color: ${activeTagFilter === 'ambiance' ? '#000' : 'var(--color-text-muted)'}; font-size: 0.75rem; border: 1px solid ${activeTagFilter === 'ambiance' ? 'var(--color-primary)' : 'var(--color-border)'};">Fine Ambiance (${ambianceCount})</span>
+      `;
+
+      tagsContainer.querySelectorAll(".sentiment-tag").forEach(tagBtn => {
+        tagBtn.addEventListener("click", () => {
+          activeTagFilter = tagBtn.dataset.tag;
+          updateAnalytics();
+          renderReviews();
+        });
+      });
+    }
+  }
+
   function renderReviews() {
     const grid = document.getElementById("reviews-grid");
     if (!grid) return;
 
     grid.innerHTML = "";
     
-    // Apply translations to pinned review if available
     const activePinned = {
       ...pinnedReview,
       text: typeof i18next !== 'undefined' && i18next.t && i18next.t('reviews.pinned_review_text') !== 'reviews.pinned_review_text' 
@@ -923,14 +977,29 @@ function setupReviews() {
         ? i18next.t('reviews.pinned_review_date') : pinnedReview.date,
     };
 
-    [activePinned, ...getReviews()].forEach((review) => {
+    let allReviews = [activePinned, ...getReviews()];
+
+    if (activeTagFilter !== "all") {
+      allReviews = allReviews.filter(r => {
+        const tags = analyzeSentimentTags(r.text);
+        return tags.some(t => t.key === activeTagFilter);
+      });
+    }
+
+    allReviews.forEach((review) => {
       const card = document.createElement("div");
       card.className = "review-card";
       const rating = Math.max(0, Math.min(5, Math.round(Number(review.rating) || 0)));
-      const stars = "\u2605".repeat(rating) + "\u2606".repeat(5 - rating);
+      const stars = "★".repeat(rating) + "☆".repeat(5 - rating);
+
+      const tags = analyzeSentimentTags(review.text);
+      const tagsHtml = tags.map(t => `<span style="font-size: 0.7rem; background: rgba(201, 169, 98, 0.1); color: var(--color-primary); border: 1px solid rgba(201, 169, 98, 0.2); padding: 2px 8px; border-radius: 12px; margin-right: 5px;">${t.label}</span>`).join("");
 
       card.innerHTML = `
-        <div class="review-stars">${stars}</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div class="review-stars">${stars}</div>
+          <div style="display: flex;">${tagsHtml}</div>
+        </div>
         <p class="review-text"></p>
         <div class="review-author">
           <div class="review-avatar"></div>
@@ -1015,6 +1084,7 @@ function setupReviews() {
       });
 
       localStorage.setItem(storageKey, JSON.stringify(reviews));
+      updateAnalytics();
       renderReviews();
       reviewForm.reset();
       selectedRating = 0;
@@ -1031,8 +1101,8 @@ function setupReviews() {
     });
   }
 
-  // Expose global render function for i18n
   window.renderReviews = renderReviews;
+  updateAnalytics();
   renderReviews();
 }
 
@@ -1435,7 +1505,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
   }
-}
+});
 
 function setupOrderFeatures() {
   const menuItems = document.querySelectorAll(".menu-item");
@@ -2005,6 +2075,8 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.style.display = "none";
     }
   });
+});
+
 // Feature 9: Live Table Availability Estimator
 // =============================================
 function setupTableAvailabilityEstimator() {
@@ -2064,6 +2136,8 @@ function setupTableAvailabilityEstimator() {
       }, 0);
     });
   }
+}
+
 // Feature 10: Search Suggestions Handler
 // =============================================
 function setupSearchSuggestions() {
@@ -2076,6 +2150,10 @@ function setupSearchSuggestions() {
     chip.addEventListener("click", () => {
       searchInput.value = chip.dataset.query;
       searchInput.dispatchEvent(new Event("input"));
+    });
+  });
+}
+
 // Feature 9: Reservation Success & Calendar Integration
 // =============================================
 function showReservationSuccessModal(date, time, guests) {
@@ -2145,6 +2223,8 @@ END:VCALENDAR`;
   };
 
   modal.style.display = "block";
+}
+
 // Feature 11: Scroll Reveal & Autoplay
 // =============================================
 function setupIntersectionObserver() {
@@ -2210,6 +2290,9 @@ function setupAutoScroll() {
   grid.addEventListener("touchstart", stopAutoplay, { passive: true });
   grid.addEventListener("touchend", () => {
     if (isScrollable()) startAutoplay();
+  });
+}
+
 // Feature 6: Interactive FAQ Accordion
 // =============================================
 function setupFaqAccordion() {

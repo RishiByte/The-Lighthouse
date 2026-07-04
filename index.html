@@ -988,6 +988,50 @@
           <h2 class="section-title" data-i18n="reviews.title">Customer Reviews</h2>
         </div>
 
+        <!-- Sentiment Analytics Summary -->
+        <div class="sentiment-summary" style="display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 20px; margin-bottom: 40px; background: #131110; border: 1px solid var(--color-border); border-radius: 12px; padding: 25px;">
+          <!-- Left Col: Score -->
+          <div style="text-align: center; border-right: 1px solid var(--color-border); padding-right: 20px; display: flex; flex-direction: column; justify-content: center;">
+            <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px;">Overall Sentiment</span>
+            <strong style="font-size: 2.8rem; color: var(--color-primary); font-family: var(--font-serif); line-height: 1.1; margin: 10px 0;" id="overall-sentiment-score">96%</strong>
+            <span style="color: #4ade80; font-size: 0.85rem; font-weight: 600;">✨ Highly Positive</span>
+          </div>
+
+          <!-- Middle Col: Tag cloud filter toggles -->
+          <div style="border-right: 1px solid var(--color-border); padding-right: 20px; padding-left: 10px;">
+            <h4 style="font-size: 0.85rem; color: var(--color-primary); text-transform: uppercase; margin-bottom: 12px; font-family: var(--font-serif);">Popular Sentiment Tags</h4>
+            <div id="sentiment-tags-container" style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <!-- Dynamically populated -->
+              <span class="sentiment-tag active" data-tag="all" style="cursor: pointer; padding: 4px 10px; border-radius: 20px; background: var(--color-primary); color: #000; font-size: 0.75rem; font-weight: 600; border: 1px solid var(--color-primary);">All (12)</span>
+              <span class="sentiment-tag" data-tag="flavor" style="cursor: pointer; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,0.02); color: var(--color-text-muted); font-size: 0.75rem; border: 1px solid var(--color-border);">Rich Aromas (5)</span>
+              <span class="sentiment-tag" data-tag="service" style="cursor: pointer; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,0.02); color: var(--color-text-muted); font-size: 0.75rem; border: 1px solid var(--color-border);">Service (4)</span>
+              <span class="sentiment-tag" data-tag="ambiance" style="cursor: pointer; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,0.02); color: var(--color-text-muted); font-size: 0.75rem; border: 1px solid var(--color-border);">Fine Ambiance (3)</span>
+            </div>
+          </div>
+
+          <!-- Right Col: Progress bars -->
+          <div style="padding-left: 10px; display: flex; flex-direction: column; justify-content: center; gap: 10px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px;">
+                <span style="color: var(--color-text-muted);">Gourmet / Taste rating</span>
+                <span style="color: #fff; font-weight: bold;">98%</span>
+              </div>
+              <div style="height: 6px; background: #0c0a09; border-radius: 10px; overflow: hidden;">
+                <div style="width: 98%; height: 100%; background: var(--color-primary);"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px;">
+                <span style="color: var(--color-text-muted);">Hospitality & Care</span>
+                <span style="color: #fff; font-weight: bold;">92%</span>
+              </div>
+              <div style="height: 6px; background: #0c0a09; border-radius: 10px; overflow: hidden;">
+                <div style="width: 92%; height: 100%; background: var(--color-primary);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="reviews-grid" id="reviews-grid"></div>
 
         <div class="review-form-wrapper">
@@ -1519,6 +1563,10 @@
         </div>
         <div style="text-align: center; margin-top: 20px;">
           <button type="button" class="btn btn-primary btn-sm" id="printTicketBtn">Print / Save Ticket</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Reservation Success Modal -->
     <div id="reservation-success-modal" class="reservation-success-modal">
       <div class="success-modal-content">
