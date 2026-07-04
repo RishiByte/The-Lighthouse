@@ -328,19 +328,13 @@ function getActiveDiet() {
 function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
   const menuItems = document.querySelectorAll('.menu-item');
   let visibleCount = 0;
-  const searchText = menuSearch ? menuSearch.value.trim().toLowerCase() : "";
+  const searchLower = searchText.trim().toLowerCase();
 
   menuItems.forEach((item) => {
     const h3 = item.querySelector('h3');
     const itemName = h3 ? h3.textContent.toLowerCase() : "";
     const category = item.dataset.category || "";
-    const type = item.dataset.type || item.dataset.diet || "all";
-  const searchLower = searchText.toLowerCase();
-
-  menuItems.forEach((item) => {
-    const itemName = (item.querySelector('h3')?.textContent || "").toLowerCase();
-    const category = item.dataset.category || 'all';
-    const itemDiet = item.dataset.diet || item.dataset.type || 'all';
+    const itemDiet = item.dataset.diet || item.dataset.type || "all";
 
     const matchesSearch = itemName.includes(searchLower);
     const matchesFilter = filter === 'all' || category === filter;
@@ -351,15 +345,14 @@ function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
         h3.dataset.original = h3.innerHTML;
       }
       const originalText = h3.dataset.original;
-      if (searchText) {
-        const regex = new RegExp(`(${searchText})`, 'gi');
+      if (searchLower) {
+        const regex = new RegExp(`(${searchLower})`, 'gi');
         h3.innerHTML = originalText.replace(regex, '<span class="search-highlight">$1</span>');
       } else {
         h3.innerHTML = originalText;
       }
     }
 
-    // Use both class manipulation (from HEAD) and display toggle (from main) for robustness
     if (matchesSearch && matchesFilter && matchesDiet) {
       item.classList.remove('hidden-item', 'diet-hidden');
       item.style.display = "";
@@ -1435,7 +1428,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
   }
-}
+});
 
 function setupOrderFeatures() {
   const menuItems = document.querySelectorAll(".menu-item");
@@ -2005,6 +1998,8 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.style.display = "none";
     }
   });
+});
+
 // Feature 9: Live Table Availability Estimator
 // =============================================
 function setupTableAvailabilityEstimator() {
@@ -2064,6 +2059,8 @@ function setupTableAvailabilityEstimator() {
       }, 0);
     });
   }
+}
+
 // Feature 10: Search Suggestions Handler
 // =============================================
 function setupSearchSuggestions() {
@@ -2076,6 +2073,10 @@ function setupSearchSuggestions() {
     chip.addEventListener("click", () => {
       searchInput.value = chip.dataset.query;
       searchInput.dispatchEvent(new Event("input"));
+    });
+  });
+}
+
 // Feature 9: Reservation Success & Calendar Integration
 // =============================================
 function showReservationSuccessModal(date, time, guests) {
@@ -2145,6 +2146,8 @@ END:VCALENDAR`;
   };
 
   modal.style.display = "block";
+}
+
 // Feature 11: Scroll Reveal & Autoplay
 // =============================================
 function setupIntersectionObserver() {
@@ -2210,6 +2213,9 @@ function setupAutoScroll() {
   grid.addEventListener("touchstart", stopAutoplay, { passive: true });
   grid.addEventListener("touchend", () => {
     if (isScrollable()) startAutoplay();
+  });
+}
+
 // Feature 6: Interactive FAQ Accordion
 // =============================================
 function setupFaqAccordion() {
@@ -2228,6 +2234,146 @@ function setupFaqAccordion() {
     });
   });
 }
+
+// =============================================
+// Feature 4: Recipe Card & Masterclass Modal
+// =============================================
+function setupRecipeModal() {
+  const modal = document.getElementById("recipe-modal");
+  const closeBtn = document.getElementById("closeRecipeModal");
+  const printBtn = document.getElementById("print-recipe-btn");
+  const playState = document.getElementById("video-play-state");
+  const playingState = document.getElementById("video-playing-state");
+  const pauseBtn = document.getElementById("video-pause-btn");
+  const videoContainer = document.getElementById("video-container");
+
+  if (!modal || !closeBtn || !printBtn || !playState || !playingState || !pauseBtn || !videoContainer) return;
+
+  let activeDish = null;
+
+  const menuItems = document.querySelectorAll(".menu-item");
+  menuItems.forEach(item => {
+    const actions = item.querySelector(".menu-actions");
+    if (!actions) return;
+    
+    if (!actions.querySelector(".recipe-btn")) {
+      const recipeBtn = document.createElement("button");
+      recipeBtn.className = "menu-action-btn recipe-btn";
+      recipeBtn.type = "button";
+      recipeBtn.textContent = "Recipe";
+      recipeBtn.style.cssText = "margin-left: 5px; font-size: 0.8rem; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--color-border); background: transparent; color: var(--color-text); cursor: pointer; transition: var(--transition);";
+      
+      recipeBtn.addEventListener("mouseover", () => {
+        recipeBtn.style.borderColor = "var(--color-primary)";
+        recipeBtn.style.color = "var(--color-primary)";
+      });
+      recipeBtn.addEventListener("mouseout", () => {
+        recipeBtn.style.borderColor = "var(--color-border)";
+        recipeBtn.style.color = "var(--color-text)";
+      });
+      
+      actions.appendChild(recipeBtn);
+
+      recipeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const data = getMenuItemData(item);
+        openRecipeModal(data, item);
+      });
+    }
+  });
+
+  function openRecipeModal(data, item) {
+    activeDish = data;
+    
+    document.getElementById("recipe-modal-title").textContent = data.title;
+    document.getElementById("recipe-modal-category").textContent = item.dataset.category || "Signature";
+
+    const ingList = document.getElementById("recipe-modal-ingredients");
+    ingList.innerHTML = "";
+    
+    const ingredients = item.querySelector(".food-card-front")?.innerHTML.includes("naan") 
+      ? ["300g Fresh Paneer cubes", "3 ripe Tomatoes (pureed)", "2 tbsp Premium Butter", "1/2 cup Fresh Cream", "1 tsp Koriander seeds", "A pinch of Kasuri Methi"]
+      : ["200g Basmati Rice", "150g Minced Chicken (Keema)", "1 Onion (diced)", "1 tsp Ginger-Garlic paste", "Spices (cardamom, cinnamon, chili)", "Fresh Coriander"];
+
+    ingredients.forEach(ing => {
+      const li = document.createElement("li");
+      li.textContent = ing;
+      ingList.appendChild(li);
+    });
+
+    const prep = item.querySelector(".food-card-front")?.innerHTML.includes("naan")
+      ? "Sauté tomato puree and ginger-garlic paste in butter. Add aromatic spices and simmer. Stir in fresh cream and add soft paneer cubes. Garnish with a sprinkle of crushed Kasuri Methi. Serve hot with butter naan."
+      : "Sauté onions and ginger-garlic paste until golden. Add minced chicken and spices, cooking thoroughly. Prepare fermented rice batter, spread thinly on hot tawa, stuff with chicken masala, fold, and serve crispy.";
+    
+    document.getElementById("recipe-modal-prep").textContent = prep;
+
+    playState.style.display = "block";
+    playingState.style.display = "none";
+
+    modal.style.display = "block";
+  }
+
+  videoContainer.addEventListener("click", () => {
+    if (playState.style.display === "block") {
+      playState.style.display = "none";
+      playingState.style.display = "block";
+    }
+  });
+
+  pauseBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    playState.style.display = "block";
+    playingState.style.display = "none";
+  });
+
+  closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  printBtn.addEventListener("click", () => {
+    if (!activeDish) return;
+    const printContent = `
+      <html>
+        <head>
+          <title>${activeDish.title} Recipe Card - The Lighthouse</title>
+          <style>
+            body { font-family: 'Georgia', serif; background: #fff; color: #1a1714; padding: 40px; }
+            .card { border: 5px double #c9a962; padding: 30px; max-width: 600px; margin: 0 auto; }
+            h1 { font-family: 'Times New Roman', serif; text-align: center; color: #c9a962; margin-bottom: 20px; }
+            h3 { border-bottom: 1px solid #c9a962; padding-bottom: 5px; margin-top: 25px; }
+            ul { line-height: 1.6; }
+            p { line-height: 1.6; }
+            .footer { text-align: center; font-size: 0.8rem; margin-top: 40px; color: #9a958e; }
+          </style>
+        </head>
+        <body>
+          <div class="card">
+            <h1>THE LIGHTHOUSE RECIPE CARD</h1>
+            <h2 style="text-align:center;">${activeDish.title}</h2>
+            <h3>Ingredients</h3>
+            <ul>
+              ${document.getElementById("recipe-modal-ingredients").innerHTML}
+            </ul>
+            <h3>Preparation</h3>
+            <p>${document.getElementById("recipe-modal-prep").textContent}</p>
+            <div class="footer">Compliments of The Lighthouse Culinary Team</div>
+          </div>
+          <script>window.print();</script>
+        </body>
+      </html>
+    `;
+    const win = window.open("", "_blank");
+    win.document.write(printContent);
+    win.document.close();
+  });
+}
+
 // PDF MENU DOWNLOAD
 // =============================================
 function loadHtml2Pdf() {
@@ -2373,6 +2519,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupGiftCardCustomizer();
   setupVirtualSommelier();
   setupLoyaltyClub();
+  setupRecipeModal();
 
   // i18next Setup
   if (typeof i18next !== 'undefined' && typeof i18nextHttpBackend !== 'undefined' && typeof i18nextBrowserLanguageDetector !== 'undefined') {

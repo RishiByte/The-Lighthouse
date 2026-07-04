@@ -1519,6 +1519,59 @@
         </div>
         <div style="text-align: center; margin-top: 20px;">
           <button type="button" class="btn btn-primary btn-sm" id="printTicketBtn">Print / Save Ticket</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recipe & Masterclass Modal -->
+    <div id="recipe-modal" class="modal" style="display: none; z-index: 10000;">
+      <div class="modal-content recipe-modal-content" style="max-width: 700px; padding: 30px; background: #1a1714; border: 1px solid var(--color-primary); border-radius: 8px; color: var(--color-text); margin: 10% auto; position: relative;">
+        <span class="close-btn" id="closeRecipeModal" style="position: absolute; right: 20px; top: 15px; font-size: 1.5rem; cursor: pointer; color: var(--color-text-muted);">&times;</span>
+        <div class="recipe-modal-header" style="text-align: center; margin-bottom: 20px;">
+          <span class="suggestion-meta" id="recipe-modal-category" style="background: rgba(201, 169, 98, 0.1); color: var(--color-primary); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Signature Dish</span>
+          <h3 id="recipe-modal-title" style="font-family: var(--font-serif); font-size: 1.8rem; color: var(--color-primary); margin-top: 10px;">Dish Name</h3>
+        </div>
+
+        <div class="recipe-modal-body" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px;">
+          <!-- Left Column: Masterclass Video & Print -->
+          <div>
+            <h4 style="font-family: var(--font-serif); color: var(--color-primary); margin-bottom: 10px;">🎥 Culinary Masterclass</h4>
+            <div class="video-container" id="video-container" style="position: relative; height: 160px; background: #0c0a09; border: 1px solid var(--color-border); border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;">
+              <div id="video-play-state" style="text-align: center;">
+                <span style="font-size: 3rem; color: var(--color-primary); opacity: 0.8;">▶</span>
+                <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 5px;">Play Masterclass Tutorial</p>
+              </div>
+              <div id="video-playing-state" style="display: none; width: 100%; height: 100%; position: relative; background: #000;">
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--color-primary); text-align: center;">
+                  <div style="border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--color-primary); border-radius: 50%; width: 25px; height: 25px; animation: spin 1s linear infinite; margin: 0 auto 10px;"></div>
+                  <span style="font-size: 0.8rem;">Streaming Masterclass...</span>
+                </div>
+                <div style="position: absolute; bottom: 10px; left: 10px; right: 10px; display: flex; align-items: center; justify-content: space-between; font-size: 0.7rem; color: #fff;">
+                  <span>0:14 / 3:45</span>
+                  <button id="video-pause-btn" style="background: transparent; border: none; color: var(--color-primary); cursor: pointer;">❚❚ Pause</button>
+                </div>
+              </div>
+            </div>
+            
+            <button type="button" class="btn btn-outline btn-full" id="print-recipe-btn" style="margin-top: 20px; width: 100%;">🖨️ Download Styled Recipe Card</button>
+          </div>
+
+          <!-- Right Column: Ingredients & Preparation -->
+          <div style="border-left: 1px solid var(--color-border); padding-left: 20px; max-height: 250px; overflow-y: auto;">
+            <h4 style="font-family: var(--font-serif); color: var(--color-primary); margin-bottom: 8px;">📋 Key Ingredients</h4>
+            <ul id="recipe-modal-ingredients" style="font-size: 0.85rem; color: var(--color-text-muted); padding-left: 20px; line-height: 1.5;">
+              <!-- Filled dynamically -->
+            </ul>
+
+            <h4 style="font-family: var(--font-serif); color: var(--color-primary); margin-top: 15px; margin-bottom: 8px;">👨‍🍳 Preparation</h4>
+            <p id="recipe-modal-prep" style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.5;">
+              <!-- Filled dynamically -->
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Reservation Success Modal -->
     <div id="reservation-success-modal" class="reservation-success-modal">
       <div class="success-modal-content">
