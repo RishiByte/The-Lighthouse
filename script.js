@@ -328,19 +328,13 @@ function getActiveDiet() {
 function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
   const menuItems = document.querySelectorAll('.menu-item');
   let visibleCount = 0;
-  const searchText = menuSearch ? menuSearch.value.trim().toLowerCase() : "";
+  const searchLower = searchText.trim().toLowerCase();
 
   menuItems.forEach((item) => {
     const h3 = item.querySelector('h3');
     const itemName = h3 ? h3.textContent.toLowerCase() : "";
     const category = item.dataset.category || "";
-    const type = item.dataset.type || item.dataset.diet || "all";
-  const searchLower = searchText.toLowerCase();
-
-  menuItems.forEach((item) => {
-    const itemName = (item.querySelector('h3')?.textContent || "").toLowerCase();
-    const category = item.dataset.category || 'all';
-    const itemDiet = item.dataset.diet || item.dataset.type || 'all';
+    const itemDiet = item.dataset.diet || item.dataset.type || "all";
 
     const matchesSearch = itemName.includes(searchLower);
     const matchesFilter = filter === 'all' || category === filter;
@@ -351,15 +345,14 @@ function filterMenuItems(filter = 'all', searchText = '', diet = 'all') {
         h3.dataset.original = h3.innerHTML;
       }
       const originalText = h3.dataset.original;
-      if (searchText) {
-        const regex = new RegExp(`(${searchText})`, 'gi');
+      if (searchLower) {
+        const regex = new RegExp(`(${searchLower})`, 'gi');
         h3.innerHTML = originalText.replace(regex, '<span class="search-highlight">$1</span>');
       } else {
         h3.innerHTML = originalText;
       }
     }
 
-    // Use both class manipulation (from HEAD) and display toggle (from main) for robustness
     if (matchesSearch && matchesFilter && matchesDiet) {
       item.classList.remove('hidden-item', 'diet-hidden');
       item.style.display = "";
@@ -1359,6 +1352,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupGiftCardCustomizer();
   setupVirtualSommelier();
   setupLoyaltyClub();
+  setupDietaryProfiler();
   setupTableAvailabilityEstimator();
   setupSearchSuggestions();
   setupFaqAccordion();
@@ -1435,7 +1429,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
   }
-}
+});
 
 function setupOrderFeatures() {
   const menuItems = document.querySelectorAll(".menu-item");
@@ -2005,6 +1999,8 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.style.display = "none";
     }
   });
+});
+
 // Feature 9: Live Table Availability Estimator
 // =============================================
 function setupTableAvailabilityEstimator() {
@@ -2064,6 +2060,8 @@ function setupTableAvailabilityEstimator() {
       }, 0);
     });
   }
+}
+
 // Feature 10: Search Suggestions Handler
 // =============================================
 function setupSearchSuggestions() {
@@ -2076,6 +2074,10 @@ function setupSearchSuggestions() {
     chip.addEventListener("click", () => {
       searchInput.value = chip.dataset.query;
       searchInput.dispatchEvent(new Event("input"));
+    });
+  });
+}
+
 // Feature 9: Reservation Success & Calendar Integration
 // =============================================
 function showReservationSuccessModal(date, time, guests) {
@@ -2145,6 +2147,8 @@ END:VCALENDAR`;
   };
 
   modal.style.display = "block";
+}
+
 // Feature 11: Scroll Reveal & Autoplay
 // =============================================
 function setupIntersectionObserver() {
@@ -2210,6 +2214,9 @@ function setupAutoScroll() {
   grid.addEventListener("touchstart", stopAutoplay, { passive: true });
   grid.addEventListener("touchend", () => {
     if (isScrollable()) startAutoplay();
+  });
+}
+
 // Feature 6: Interactive FAQ Accordion
 // =============================================
 function setupFaqAccordion() {
@@ -2228,6 +2235,110 @@ function setupFaqAccordion() {
     });
   });
 }
+
+// =============================================
+// Feature 3: Advanced Dietary Profiler & Menu Highlighter
+// =============================================
+function setupDietaryProfiler() {
+  const profileContainer = document.createElement("div");
+  profileContainer.className = "dietary-profiler-container container";
+  profileContainer.style.cssText = "margin-top: 30px; margin-bottom: 20px; text-align: center;";
+  profileContainer.innerHTML = `
+    <div class="profiler-card" style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 8px; padding: 20px; max-width: 600px; margin: 0 auto;">
+      <h3 style="font-family: var(--font-serif); color: var(--color-primary); font-size: 1.3rem;">📋 Advanced Dietary Preference Profiler</h3>
+      <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 15px;">Enable preferences to highlight matching signature culinary items with a gold border and dim non-matching items.</p>
+      <div class="diet-toggles" style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+        <label class="switch-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem;">
+          <input type="checkbox" id="pref-veg" style="accent-color: var(--color-primary);" /> Vegetarian
+        </label>
+        <label class="switch-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem;">
+          <input type="checkbox" id="pref-vegan" style="accent-color: var(--color-primary);" /> Vegan
+        </label>
+        <label class="switch-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem;">
+          <input type="checkbox" id="pref-gluten" style="accent-color: var(--color-primary);" /> Gluten-Free
+        </label>
+        <label class="switch-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem;">
+          <input type="checkbox" id="pref-keto" style="accent-color: var(--color-primary);" /> Keto-Friendly
+        </label>
+      </div>
+    </div>
+  `;
+
+  const menuHeader = document.querySelector("#menu .container");
+  if (menuHeader) {
+    const parent = menuHeader;
+    const filterDiv = document.querySelector("#dietFilter") || document.querySelector(".menu-filters");
+    if (filterDiv) {
+      parent.insertBefore(profileContainer, filterDiv.nextElementSibling);
+    } else {
+      parent.appendChild(profileContainer);
+    }
+  }
+
+  const toggles = ["pref-veg", "pref-vegan", "pref-gluten", "pref-keto"].map(id => document.getElementById(id));
+  if (toggles.some(t => !t)) return;
+
+  toggles.forEach(t => {
+    t.addEventListener("change", applyDietaryHighlighting);
+  });
+
+  function applyDietaryHighlighting() {
+    const isVeg = document.getElementById("pref-veg").checked;
+    const isVegan = document.getElementById("pref-vegan").checked;
+    const isGluten = document.getElementById("pref-gluten").checked;
+    const isKeto = document.getElementById("pref-keto").checked;
+
+    const noPrefsActive = !isVeg && !isVegan && !isGluten && !isKeto;
+
+    const menuItems = document.querySelectorAll(".menu-item");
+    menuItems.forEach(item => {
+      const card = item.querySelector(".food-card-3d") || item.querySelector(".food-card");
+      if (!card) return;
+
+      if (noPrefsActive) {
+        card.style.border = "";
+        card.style.opacity = "";
+        card.style.boxShadow = "";
+        const badge = card.querySelector(".dietary-match-badge");
+        if (badge) badge.remove();
+        return;
+      }
+
+      const dietType = item.dataset.diet || item.dataset.type || "";
+      const isItemVeg = dietType.includes("veg");
+      const isItemVegan = dietType.includes("vegan") || item.innerHTML.toLowerCase().includes("vegan");
+      const isItemGlutenFree = item.innerHTML.toLowerCase().includes("gluten-free") || item.innerHTML.toLowerCase().includes("gluten free") || !item.innerHTML.toLowerCase().includes("allergen");
+      const isItemKeto = item.innerHTML.toLowerCase().includes("keto") || item.innerHTML.toLowerCase().includes("paneer") || item.innerHTML.toLowerCase().includes("chicken");
+
+      let matchesAll = true;
+      if (isVeg && !isItemVeg) matchesAll = false;
+      if (isVegan && !isItemVegan) matchesAll = false;
+      if (isGluten && !isItemGlutenFree) matchesAll = false;
+      if (isKeto && !isItemKeto) matchesAll = false;
+
+      if (matchesAll) {
+        card.style.border = "2px solid var(--color-primary)";
+        card.style.boxShadow = "0 0 15px rgba(201, 169, 98, 0.4)";
+        card.style.opacity = "1";
+        if (!card.querySelector(".dietary-match-badge")) {
+          const badge = document.createElement("div");
+          badge.className = "dietary-match-badge";
+          badge.textContent = "🏆 Diet Match";
+          badge.style.cssText = "position:absolute; top:10px; right:10px; background:var(--color-primary); color:#1a1714; font-size:0.75rem; padding:4px 8px; border-radius:4px; font-weight:bold; z-index:5;";
+          card.style.position = "relative";
+          card.appendChild(badge);
+        }
+      } else {
+        card.style.border = "";
+        card.style.boxShadow = "";
+        card.style.opacity = "0.3";
+        const badge = card.querySelector(".dietary-match-badge");
+        if (badge) badge.remove();
+      }
+    });
+  }
+}
+
 // PDF MENU DOWNLOAD
 // =============================================
 function loadHtml2Pdf() {
@@ -2373,6 +2484,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupGiftCardCustomizer();
   setupVirtualSommelier();
   setupLoyaltyClub();
+  setupDietaryProfiler();
 
   // i18next Setup
   if (typeof i18next !== 'undefined' && typeof i18nextHttpBackend !== 'undefined' && typeof i18nextBrowserLanguageDetector !== 'undefined') {
